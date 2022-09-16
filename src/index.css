@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.active {
+  @apply border-b-2  
+    border-green-800 
+    text-gray-900 dark:border-gray-300 dark:text-white
+}
+
+body::-webkit-scrollbar {
+  width: 10px;               /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+  background: lightgray;        /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: green;    /* color of the scroll thumb */
+  border-radius: 15px;       /* roundness of the scroll thumb */
+  border: 2px solid lightgray;  /* creates padding around scroll thumb */
+}
