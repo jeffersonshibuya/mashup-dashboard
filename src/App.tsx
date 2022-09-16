@@ -6,6 +6,7 @@ import NotFound from './pages/NotFound';
 import './index.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Dashboard from './pages/Dashboard';
 
 export function App() {
   return (
@@ -18,7 +19,8 @@ export function App() {
 
           <div className="flex flex-col flex-grow p-2 bg-white rounded">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/home" element={<Home />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
