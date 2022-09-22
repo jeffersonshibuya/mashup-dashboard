@@ -24,5 +24,24 @@ module.exports = {
     'prettier/prettier': 'error',
     'import/prefer-default-export': 0,
     '@typescript-eslint/naming-convention': 'off',
+    'react/jsx-props-no-spreading': 0,
+    'react/jsx-no-bind': 0,
+    'jsx-a11y/control-has-associated-label': 0,
+    'jsx-a11y/label-has-associated-control': [
+      'error',
+      {
+        required: {
+          some: ['nesting', 'id'],
+        },
+      },
+    ],
+    'jsx-a11y/label-has-for': [
+      'error',
+      {
+        required: {
+          some: ['nesting', 'id'],
+        },
+      },
+    ],
   },
 };
