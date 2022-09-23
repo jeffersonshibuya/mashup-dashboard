@@ -4,21 +4,26 @@ import { Fragment, useState } from 'react';
 import { Input } from './Form/Input';
 
 interface Props {
-  title: string;
   isOpen: boolean;
   loading: boolean;
   setIsOpen: (status: boolean) => void;
-  handleSave: (title: string) => void;
+  handleSave: (data: { title: string; sheetId: string }) => void;
 }
 
-export default function AppModal({
+export default function AddSheetModal({
   isOpen,
   setIsOpen,
-  title,
   loading,
   handleSave,
 }: Props) {
-  const [newTitle, setNewTitle] = useState(title);
+  const [title, setTitle] = useState('');
+  const [sheetId, setSheetId] = useState('');
+
+  function handleAddNewSheet() {
+    handleSave({ title, sheetId });
+    setTitle('');
+    setSheetId('');
+  }
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -66,12 +71,22 @@ export default function AppModal({
                   </button>
                 </Dialog.Title>
                 <div className="my-4">
+                  <label htmlFor="sheetId">Sheet ID</label>
+                  <Input
+                    id="sheetId"
+                    placeholder="Sheet ID"
+                    value={sheetId}
+                    onChange={(e) => setSheetId(e.target.value)}
+                  />
+                </div>
+
+                <div className="my-4">
                   <label htmlFor="title">Title</label>
                   <Input
                     id="title"
                     placeholder="Sheet Title"
-                    value={newTitle}
-                    onChange={(e) => setNewTitle(e.target.value)}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                   />
                 </div>
 
@@ -84,7 +99,7 @@ export default function AppModal({
                     hover:text-white items-center border-green-600
                     focus:outline-none focus-visible:ring-2  gap-2
                     focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    onClick={() => handleSave(newTitle)}
+                    onClick={handleAddNewSheet}
                   >
                     {!loading ? (
                       <>

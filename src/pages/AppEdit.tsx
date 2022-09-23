@@ -5,11 +5,14 @@ import {
   CircleNotch,
   ComputerTower,
   Key,
+  ListPlus,
   Pencil,
   Trash,
+  XCircle,
 } from 'phosphor-react';
 import { FormEvent, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import AddSheetModal from '../components/AddSheetModal';
 import { Input } from '../components/Form/Input';
 import AppModal from '../components/Modal';
 import { api } from '../services/api';
@@ -33,6 +36,7 @@ function AppEdit() {
   const [editSheet, setEditSheet] = useState({} as sheetsResponseData);
 
   const [openModal, setOpenModal] = useState(false);
+  const [openAddModal, setOpenAddModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
   function handleEditSheet(sheet: sheetsResponseData) {
@@ -64,7 +68,7 @@ function AppEdit() {
       alert(error);
     } finally {
       setOpenModal(false);
-      setLoading(true);
+      setLoading(false);
     }
   }
 
@@ -100,6 +104,35 @@ function AppEdit() {
     }
   }
 
+  async function handleAddSheet(data: { title: string; sheetId: string }) {
+    try {
+      setLoading(true);
+      const response: { data: sheetsResponseData[] } = await api.post(
+        '/sheets',
+        {
+          action: 'create-update',
+          name: appName,
+          sheetId: data.sheetId,
+          title: data.title,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      const sheetsListUpdated = response.data;
+      setSheetsList(sheetsListUpdated);
+      alert('Success');
+    } catch (error) {
+      alert(error);
+    } finally {
+      setOpenAddModal(false);
+      setLoading(false);
+    }
+  }
+
   return (
     <>
       <div className="flex items-center pb-4 border-b border-gray-300">
@@ -126,6 +159,12 @@ function AppEdit() {
           </ol>
         </nav>
       </div>
+      <AddSheetModal
+        isOpen={openAddModal}
+        setIsOpen={setOpenAddModal}
+        handleSave={handleAddSheet}
+        loading={loading}
+      />
       {openModal && (
         <AppModal
           isOpen={openModal}
@@ -136,34 +175,14 @@ function AppEdit() {
         />
       )}
       <div className="shadow p-2 rounded">
-        <form className="flex flex-col gap-4" onSubmit={handleSaveApp}>
-          <ul className="my-3 space-y-5">
-            <li className="flex space-x-3 items-center">
-              <Key size={24} className="text-gray-900" />
-              <span className="w-full flex flex-1 justify-between font-semibold leading-tight text-gray-600">
-                <Input
-                  id="appId"
-                  placeholder="Server"
-                  value={newAppId}
-                  onChange={(e) => setNewAppId(e.target.value)}
-                  disabled={!editApp}
-                />
-              </span>
-            </li>
-            <li className="flex space-x-3 items-center">
-              <ComputerTower size={24} className="text-zinc-900" />
-              <Input
-                id="appId"
-                placeholder="Server"
-                value={newServer}
-                onChange={(e) => setNewServer(e.target.value)}
-                disabled={!editApp}
-              />
-            </li>
-          </ul>
-          <footer className="flex justify-end gap-4">
+        <form className="flex flex-col" onSubmit={handleSaveApp}>
+          <div
+            className="flex justify-between border-b border-gray-400 
+           items-center"
+          >
+            <h1>APP Info</h1>
             {editApp ? (
-              <>
+              <div className="flex justify-end gap-2">
                 {!loading && (
                   <button
                     onClick={() => {
@@ -173,19 +192,27 @@ function AppEdit() {
                     }}
                     disabled={loading}
                     type="button"
-                    className="bg-zinc-500 px-5 h-12 rounded font-semibold hover:bg-zinc-600"
+                    className="text-gray-700 gap-2 bg-white hover:bg-gray-600 
+                    border border-gray-600 focus:ring-4 focus:outline-none 
+                    focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-2 
+                    text-center inline-flex items-center mb-2 hover:text-white"
                   >
+                    <XCircle size={18} />
                     Cancel
                   </button>
                 )}
+
                 <button
-                  className="bg-violet-500 px-5 h-12 flex items-center 
-                    rounded font-semibold gap-3 hover:bg-violet-600"
                   type="submit"
+                  className="text-green-700 gap-2 bg-white hover:bg-green-600 
+                  border border-green-600 focus:ring-4 focus:outline-none 
+                  focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-2 
+                  text-center inline-flex items-center mr-2 mb-2 hover:text-white"
+                  onClick={() => setEditApp(true)}
                 >
                   {!loading ? (
                     <>
-                      <CheckCircle size={24} />
+                      <CheckCircle size={18} />
                       Save
                     </>
                   ) : (
@@ -199,24 +226,67 @@ function AppEdit() {
                     </>
                   )}
                 </button>
-              </>
+              </div>
             ) : (
               <button
-                className="bg-violet-500 px-5 h-12 flex items-center 
-                      rounded font-semibold gap-3 hover:bg-violet-600"
                 type="button"
+                className="text-blue-500 bg-white gap-2 hover:bg-blue-400 
+                  border border-blue-200 focus:ring-4 focus:outline-none 
+                  focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-2 
+                  text-center inline-flex items-center mr-2 mb-2 hover:text-white"
                 onClick={() => setEditApp(true)}
               >
-                <Pencil size={22} />
+                <Pencil size={16} />
                 Edit
               </button>
             )}
-          </footer>
+          </div>
+          <ul className="my-3 space-y-5">
+            <li className="flex space-x-3 items-center">
+              <Key size={24} className="text-gray-900" />
+              <span className="w-full flex flex-1 justify-between font-semibold leading-tight text-gray-600">
+                <Input
+                  id="appId"
+                  placeholder="App ID..."
+                  value={newAppId}
+                  onChange={(e) => setNewAppId(e.target.value)}
+                  disabled={!editApp}
+                />
+              </span>
+            </li>
+            <li className="flex space-x-3 items-center">
+              <ComputerTower size={24} className="text-zinc-900" />
+              <Input
+                id="server"
+                placeholder="server name..."
+                value={newServer}
+                onChange={(e) => setNewServer(e.target.value)}
+                disabled={!editApp}
+              />
+            </li>
+          </ul>
         </form>
       </div>
 
       <hr className="my-4" />
 
+      <div
+        className="flex justify-between border-b mb-2 pb-2 border-gray-400 
+           items-center"
+      >
+        <h1>Sheets</h1>
+        <button
+          type="button"
+          className="text-blue-500 bg-white gap-2 hover:bg-blue-400 
+                  border border-blue-200 focus:ring-4 focus:outline-none 
+                  focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-2 
+                  text-center inline-flex items-center mr-2 mb-2 hover:text-white"
+          onClick={() => setOpenAddModal(true)}
+        >
+          <ListPlus size={16} />
+          New Sheet
+        </button>
+      </div>
       <div className="overflow-x-auto relative shadow-lg rounded-lg border border-gray-300">
         <table className="w-full text-sm text-left text-gray-500">
           <thead
@@ -234,7 +304,7 @@ function AppEdit() {
             </tr>
           </thead>
           <tbody>
-            {sheetsList.map((sheet) => (
+            {sheetsList?.map((sheet) => (
               <tr className="bg-white border-b" key={sheet.sheetId}>
                 <th scope="row" className="py-3 px-6 font-medium text-gray-900">
                   {sheet.sheetId}
@@ -244,8 +314,8 @@ function AppEdit() {
                   <button
                     type="button"
                     onClick={() => handleEditSheet(sheet)}
-                    className="text-blue-500 border border-blue-200 hover:text-white 
-                    hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 
+                    className="text-blue-400 border border-blue-200 hover:text-white 
+                    hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 
                     font-medium rounded-lg text-sm p-2.5 text-center inline-flex 
                     items-center mr-2
                     "

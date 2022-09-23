@@ -1,4 +1,4 @@
-import { CheckCircle, ComputerTower, Key, Pencil, X } from 'phosphor-react';
+import { CheckCircle, ComputerTower, Key, Pencil } from 'phosphor-react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { useNavigate } from 'react-router-dom';
 import { sheetsResponseData } from '../types';
