@@ -1,13 +1,18 @@
 import { HashRouter, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+
 import Sidebar from './components/Sidebar';
+import Header from './components/Header';
+import Footer from './components/Footer';
+
 import Home from './pages/Home';
 import AppEdit from './pages/AppEdit';
 import NotFound from './pages/NotFound';
+import Dashboard from './pages/Dashboard';
+import AppCreate from './pages/AppCreate';
 
 import './index.css';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Dashboard from './pages/Dashboard';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function App() {
   return (
@@ -16,12 +21,14 @@ export function App() {
       <main className="main flex flex-col flex-1 -ml-64 md:ml-0 transition-all duration-150 ease-in">
         <Header />
         <div className="main-content flex flex-col flex-grow p-2">
+          <ToastContainer autoClose={1500} />
           {/* <h1 className="font-bold text-2xl text-gray-700">Dashboard</h1> */}
 
           <div className="flex flex-col flex-1 p-2 border border-gray-200 bg-white rounded">
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/app-edit" element={<AppEdit />} />
+              <Route path="/app-create" element={<AppCreate />} />
               <Route path="/home" element={<Home />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

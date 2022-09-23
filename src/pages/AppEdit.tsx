@@ -12,6 +12,7 @@ import {
 } from 'phosphor-react';
 import { FormEvent, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import AddSheetModal from '../components/AddSheetModal';
 import { Input } from '../components/Form/Input';
 import AppModal from '../components/Modal';
@@ -63,9 +64,9 @@ function AppEdit() {
       );
 
       setSheetsList(sheetsListUpdated.data);
-      alert('Success');
+      toast.success(`Sheet: ${newTitle} Updated`);
     } catch (error) {
-      alert(error);
+      toast.error('Error on updated sheet');
     } finally {
       setOpenModal(false);
       setLoading(false);
@@ -95,9 +96,9 @@ function AppEdit() {
       const appUpdated = response.data;
       setNewAppId(appUpdated.appId);
       setNewServer(appUpdated.server);
-      alert('Success');
+      toast.success(`App: ${appName} Updated`);
     } catch (error) {
-      alert(error);
+      toast.error(`Error on update the APP`);
     } finally {
       setEditApp(false);
       setLoading(false);
@@ -124,9 +125,9 @@ function AppEdit() {
 
       const sheetsListUpdated = response.data;
       setSheetsList(sheetsListUpdated);
-      alert('Success');
+      toast.success(`Sheet: ${data.title} Added`);
     } catch (error) {
-      alert(error);
+      toast.error('Error on add new sheet!');
     } finally {
       setOpenAddModal(false);
       setLoading(false);
@@ -141,7 +142,7 @@ function AppEdit() {
             <li className="inline-flex items-center">
               <NavLink
                 to="/"
-                className="inline-flex items-center text-sm font-medium 
+                className="inline-flex items-center text font-medium 
                 text-gray-400 hover:text-gray-800"
               >
                 <ChartPieSlice weight="fill" className="mr-1" />
@@ -152,7 +153,7 @@ function AppEdit() {
               <div className="flex items-center text-gray-400">
                 <CaretRight weight="bold" />
                 <span className="ml-1 uppercase text-sm font-medium text-gray-900 md:ml-2">
-                  {appName}
+                  APP: {appName}
                 </span>
               </div>
             </li>

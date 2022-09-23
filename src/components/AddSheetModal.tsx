@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import { Dialog, Transition } from '@headlessui/react';
 import { CheckCircle, CircleNotch, X } from 'phosphor-react';
 import { Fragment, useState } from 'react';
@@ -5,7 +6,7 @@ import { Input } from './Form/Input';
 
 interface Props {
   isOpen: boolean;
-  loading: boolean;
+  loading?: boolean;
   setIsOpen: (status: boolean) => void;
   handleSave: (data: { title: string; sheetId: string }) => void;
 }

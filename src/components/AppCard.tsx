@@ -1,4 +1,4 @@
-import { CheckCircle, ComputerTower, Key, Pencil } from 'phosphor-react';
+import { CheckCircle, ComputerTower, Key, Pencil, TextT } from 'phosphor-react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { useNavigate } from 'react-router-dom';
 import { sheetsResponseData } from '../types';
@@ -25,10 +25,25 @@ function AppCard({ appId, appName, server, sheets }: AppCardProps) {
   }
 
   return (
-    <div className="p-2 w-full bg-white rounded-lg border shadow-md sm:p-4">
-      <h5 className="mb-4 uppercase flex justify-between text-xl font-semibold text-gray-600">
+    <div
+      className="w-full bg-white rounded-lg border border-gray-300 
+        shadow-md p-4"
+    >
+      <h5
+        className="mb-4 uppercase flex justify-between text-xl font-semibold 
+      text-gray-600"
+      >
         APP: {appName}
-        <Pencil onClick={handleAppEdit} />
+        <button
+          type="button"
+          onClick={handleAppEdit}
+          className="flex text-sm items-center gap-2 border-solid
+           rounded  transition-all duration-200
+           bg-blue-400 hover:bg-blue-600 px-2 py-1 text-white"
+        >
+          <Pencil onClick={handleAppEdit} size={18} />
+          Edit
+        </button>
       </h5>
       <Tabs.Tabs defaultValue="tab1">
         <Tabs.TabsList className="flex" aria-label="app info">
@@ -44,6 +59,12 @@ function AppCard({ appId, appName, server, sheets }: AppCardProps) {
             value="tab2"
           >
             Sheets
+            <span
+              className="bg-green-200 text-green-800 text-sm font-medium 
+              ml-2 px-2.5 py-0.5 rounded"
+            >
+              {sheets.length}
+            </span>
           </Tabs.TabsTrigger>
         </Tabs.TabsList>
         <Tabs.TabsContent value="tab1" className="border-none h-[200px]">
@@ -72,7 +93,7 @@ function AppCard({ appId, appName, server, sheets }: AppCardProps) {
           value="tab2"
           className="border-none h-[200px] overflow-y-auto mb-4"
         >
-          <ul className="my-3 space-y-5">
+          {/* <ul className="my-3 space-y-5">
             {sheets.map((sheet) => (
               <li className="space-x-3" key={sheet.sheetId}>
                 <div className="flex flex-1 justify-between mr-2">
@@ -96,7 +117,21 @@ function AppCard({ appId, appName, server, sheets }: AppCardProps) {
                 </div>
               </li>
             ))}
-          </ul>
+          </ul> */}
+          <dl className="max-w-md text-gray-500 divide-y mt-4 divide-gray-400">
+            {sheets.map((sheet) => (
+              <div className="flex flex-col pb-3" key={sheet.sheetId}>
+                <dt className="mb-1 text-gray-700 text-lg flex items-center gap-2">
+                  <TextT size={18} />
+                  {sheet.title}
+                </dt>
+                <dd className="text-sm font-semibold flex gap-2 items-center">
+                  <Key size={18} />
+                  {sheet.sheetId}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </Tabs.TabsContent>
       </Tabs.Tabs>
     </div>
