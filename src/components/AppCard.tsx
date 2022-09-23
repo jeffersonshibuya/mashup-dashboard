@@ -1,4 +1,4 @@
-import { CheckCircle, ComputerTower, Key, Pencil, TextT } from 'phosphor-react';
+import { CheckSquare, ComputerTower, Key, Pencil } from 'phosphor-react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { useNavigate } from 'react-router-dom';
 import { sheetsResponseData } from '../types';
@@ -30,7 +30,7 @@ function AppCard({ appId, appName, server, sheets }: AppCardProps) {
         shadow-md p-4"
     >
       <h5
-        className="mb-4 uppercase flex justify-between text-xl font-semibold 
+        className="mb-4 flex justify-between text-xl font-semibold 
       text-gray-600"
       >
         APP: {appName}
@@ -120,13 +120,13 @@ function AppCard({ appId, appName, server, sheets }: AppCardProps) {
           </ul> */}
           <dl className="max-w-md text-gray-500 divide-y mt-4 divide-gray-400">
             {sheets.map((sheet) => (
-              <div className="flex flex-col pb-3" key={sheet.sheetId}>
-                <dt className="mb-1 text-gray-700 text-lg flex items-center gap-2">
-                  <TextT size={18} />
+              <div className="flex flex-col pb-3 pt-3" key={sheet.sheetId}>
+                <dt className="mb-1 font-semibold text-gray-700 text-lg flex items-center gap-2">
+                  <CheckSquare size={18} color="#1f861d" weight="duotone" />
                   {sheet.title}
                 </dt>
-                <dd className="text-sm font-semibold flex gap-2 items-center">
-                  <Key size={18} />
+                <dd className="text-sm font-medium flex gap-2 items-center">
+                  <Key size={18} color="#1f861d" weight="duotone" />
                   {sheet.sheetId}
                 </dd>
               </div>

@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 .active {
-  @apply border-b-2  
-    border-green-800 
+  @apply 
+    border-green-800 bg-gray-600
     text-gray-900 dark:border-gray-300 dark:text-white
 }
 
