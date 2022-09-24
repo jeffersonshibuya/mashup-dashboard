@@ -13,6 +13,7 @@ import AppCreate from './pages/AppCreate';
 
 import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export function App() {
   return (

@@ -51,13 +51,13 @@ function EditApp({ appName, appId, server }: Props) {
       <footer className="mt-4 flex justify-end gap-4">
         <Dialog.Close
           className="bg-zinc-500 px-5 h-12 rounded font-semibold
-                  hover:bg-zinc-600"
+            hover:bg-zinc-600"
         >
           Cancel
         </Dialog.Close>
         <button
           className="bg-violet-500 px-5 h-12 flex items-center 
-                    rounded font-semibold gap-3 hover:bg-violet-600"
+            rounded font-semibold gap-3 hover:bg-violet-600"
           type="submit"
         >
           <CheckCircle size={24} />
