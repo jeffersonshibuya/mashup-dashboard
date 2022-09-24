@@ -11,6 +11,7 @@ import {
   Key,
   ListPlus,
   Trash,
+  Warning,
 } from 'phosphor-react';
 import { api } from '../services/api';
 
@@ -46,6 +47,41 @@ function AppCreate() {
 
   async function handleSaveApp() {
     // e.preventDefault();
+    if (!appName || !appId || !server) {
+      toast.warn(
+        <div>
+          <span className="text-red-600 font-semibold flex items-center gap-1">
+            <Warning size={16} />
+            Fields Required:
+          </span>
+          <div className="flex flex-col pb-3 pt-3">
+            {!appName && (
+              <dt className="mb-1 text-gray-700 flex items-center gap-2">
+                <IdentificationCard size={18} color="red" weight="duotone" />
+                App Name
+              </dt>
+            )}
+            {!appId && (
+              <dt className="mb-1 text-gray-700 flex items-center gap-2">
+                <Key size={18} color="red" weight="duotone" />
+                App ID
+              </dt>
+            )}
+            {!server && (
+              <dt className="mb-1 text-gray-700 flex items-center gap-2">
+                <ComputerTower size={18} color="red" weight="duotone" />
+                Server
+              </dt>
+            )}
+          </div>
+        </div>,
+        {
+          icon: false,
+          autoClose: 3000,
+        }
+      );
+      return;
+    }
     try {
       setLoading(true);
       await api.post(
@@ -142,9 +178,10 @@ function AppCreate() {
           <ul className="my-3 space-y-5">
             <li className="flex space-x-3 items-center">
               <IdentificationCard size={24} className="text-gray-900" />
-              <span className="w-full flex flex-1 justify-between font-semibold leading-tight text-gray-600">
+              <span className="w-full flex flex-1 flex-col justify-between font-semibold leading-tight text-gray-600">
                 <Input
                   id="appName"
+                  name="appName"
                   placeholder="App Name..."
                   value={appName}
                   onChange={(e) => setAppName(e.target.value)}
