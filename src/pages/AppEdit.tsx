@@ -2,6 +2,7 @@ import {
   CaretRight,
   ChartPieSlice,
   CheckCircle,
+  Checks,
   CheckSquare,
   CircleNotch,
   ComputerTower,
@@ -15,7 +16,7 @@ import {
 } from 'phosphor-react';
 import { confirmAlert } from 'react-confirm-alert';
 import { FormEvent, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import AddSheetModal from '../components/AddSheetModal';
 import { Input } from '../components/Form/Input';
@@ -31,6 +32,7 @@ interface Props {
 }
 
 function AppEdit() {
+  const navigate = useNavigate();
   const { appId, appName, server, sheets } = useLocation().state as Props;
 
   const [newAppId, setNewAppId] = useState(appId);
@@ -138,30 +140,59 @@ function AppEdit() {
     }
   }
 
-  async function DeleteSheet(sheetId: string, closeModal: () => void) {
+  async function DeleteSheet(sheetId: string) {
     try {
-      toast.info(`Deleting sheet: ${sheetId}`);
-      closeModal();
-      const response: { data: sheetsResponseData[] } = await api.post(
-        '/sheets',
-        {
-          action: 'delete',
-          name: appName,
-          sheetId,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
+      const responsePromise = new Promise((resolve, reject) => {
+        api
+          .post(
+            '/sheets',
+            {
+              action: 'delete',
+              name: appName,
+              sheetId,
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((response) => {
+            const sheetsListUpdated = response.data;
+            setSheetsList(sheetsListUpdated);
+            resolve('');
+          })
+          .catch(() => reject);
+      });
+      toast.promise(responsePromise, {
+        pending: 'Deleting sheet...',
+        success: {
+          render() {
+            return (
+              <span className="text-lg text-green-700">Sheet deleted</span>
+            );
           },
-        }
-      );
-
-      const sheetsListUpdated = response.data;
-      setSheetsList(sheetsListUpdated);
-      toast.success(`Sheet: ${sheetId} Deleted`);
+          // other options
+          icon: <Checks size={22} color="#1f861d" />,
+        },
+        error: {
+          render() {
+            return (
+              <span className="text-red-500">Error on delete {sheetId}</span>
+            );
+          },
+        },
+      });
     } catch (error) {
       toast.error('Error on add new sheet!');
     }
+
+    //   const sheetsListUpdated = response.data;
+    //   setSheetsList(sheetsListUpdated);
+    //   toast.success(`Sheet: ${sheetId} Deleted`);
+    // } catch (error) {
+    //   toast.error('Error on add new sheet!');
+    // }
   }
 
   function handleConfirmDeleteSheet(sheet: sheetsResponseData) {
@@ -223,7 +254,128 @@ function AppEdit() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => DeleteSheet(sheet.sheetId, onClose)}
+                    onClick={() => {
+                      onClose();
+                      DeleteSheet(sheet.sheetId);
+                    }}
+                    className="text-white bg-red-600 hover:bg-red-800 
+                    focus:ring-4 focus:outline-none focus:ring-red-300 
+                    dark:focus:ring-red-800 font-medium rounded-lg text-sm 
+                    inline-flex items-center px-5 py-2.5 text-center gap-1"
+                  >
+                    <Trash size={20} />
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      },
+    });
+  }
+
+  async function DeleteApp() {
+    try {
+      const responsePromise = new Promise((resolve, reject) => {
+        api
+          .post(
+            '/app',
+            {
+              action: 'delete',
+              name: appName,
+              appId,
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then(() => {
+            resolve(navigate('/'));
+          })
+          .catch(() => reject);
+      });
+      toast.promise(responsePromise, {
+        pending: 'Deleting app...',
+        success: {
+          render() {
+            return <span className="text-lg text-green-700">App deleted</span>;
+          },
+          // other options
+          icon: <Checks size={22} color="#1f861d" />,
+        },
+        error: {
+          render() {
+            return (
+              <span className="text-red-500">Error on delete {appName}</span>
+            );
+          },
+        },
+      });
+    } catch (error) {
+      toast.error('Error on add new sheet!');
+    }
+  }
+
+  function handleConfirmDeleteApp() {
+    confirmAlert({
+      // eslint-disable-next-line react/no-unstable-nested-components
+      customUI: ({ onClose }) => {
+        return (
+          <div className="overflow-y-auto overflow-x-hidden  md:inset-0 h-modal md:h-full">
+            <div className="relative p-4 w-full max-w-md h-full md:h-auto">
+              <div className="relative bg-white rounded-lg shadow">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="absolute top-3 right-2.5 text-gray-400 bg-transparent
+                   hover:bg-gray-100 hover:text-gray-900 rounded-lg text-sm
+                    p-1.5 ml-auto inline-flex items-center"
+                  data-modal-toggle="popup-modal"
+                >
+                  <X size={22} />
+                  <span className="sr-only">Close modal</span>
+                </button>
+                <div className="p-6 text-center">
+                  <div className="mx-auto mb-4 w-14 h-14 text-yellow-400">
+                    <WarningCircle size={48} />
+                  </div>
+                  <h3 className="mb-5 text-md font-normal text-gray-500 dark:text-gray-400">
+                    Are you sure you want to delete this APP? <br />
+                    <p>The app and all sheets will be deleted</p>
+                    <dl className="max-w-md text-gray-500 divide-y mt-2 divide-gray-400">
+                      <div className="flex flex-col pb-3 pt-3" key={appName}>
+                        <dt className="mb-1 font-semibold text-gray-700 flex items-center gap-2">
+                          <CheckSquare
+                            size={18}
+                            color="#1f861d"
+                            weight="duotone"
+                          />
+                          {appName}
+                        </dt>
+                      </div>
+                    </dl>
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    disabled={loading}
+                    className="text-white bg-gray-600 hover:bg-gray-800 
+                    focus:ring-4 focus:outline-none focus:ring-gray-200 
+                    rounded-lg border border-gray-200 text-sm font-medium 
+                    px-5 py-2.5 hover:text-white focus:z-10 mr-2 gap-1 inline-flex"
+                  >
+                    <XCircle size={20} />
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      DeleteApp();
+                      onClose();
+                    }}
                     className="text-white bg-red-600 hover:bg-red-800 
                     focus:ring-4 focus:outline-none focus:ring-red-300 
                     dark:focus:ring-red-800 font-medium rounded-lg text-sm 
@@ -243,7 +395,7 @@ function AppEdit() {
 
   return (
     <>
-      <div className="flex items-center pb-4 border-b border-gray-300">
+      <div className="flex items-center justify-between pb-4 border-b border-gray-300">
         <nav className="flex" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-3">
             <li className="inline-flex items-center">
@@ -266,6 +418,18 @@ function AppEdit() {
             </li>
           </ol>
         </nav>
+        <button
+          type="button"
+          onClick={handleConfirmDeleteApp}
+          className="text-white gap-2 bg-red-400 hover:bg-red-600 
+            border border-red-600 focus:ring-4 focus:outline-none
+            transition-all duration-300  focus:ring-red-300 
+            font-medium rounded-lg text-sm px-3 py-2 
+            text-center inline-flex items-center"
+        >
+          <XCircle size={18} />
+          Delete APP
+        </button>
       </div>
       <AddSheetModal
         isOpen={openAddModal}
