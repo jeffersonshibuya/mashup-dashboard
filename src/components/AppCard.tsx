@@ -2,7 +2,6 @@ import {
   CheckSquare,
   Cloud,
   ComputerTower,
-  IdentificationBadge,
   Key,
   Lock,
   Pencil,
