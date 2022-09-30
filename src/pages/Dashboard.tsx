@@ -2,7 +2,6 @@
 import { ChartPieSlice, FolderPlus } from 'phosphor-react';
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 import AppCard from '../components/AppCard';
 import Loading from '../components/Loading';
@@ -76,6 +75,9 @@ function Dashboard() {
                 appName={app.name}
                 server={app.server}
                 sheets={app.sheets}
+                isCloud={app.isCloud || false}
+                isAnonAccess={app.isAnonAccess || false}
+                webIntegrationId={app.webIntegrationId || ''}
               />
             ))}
           </div>

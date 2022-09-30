@@ -6,7 +6,9 @@ import {
   ChartPieSlice,
   CheckCircle,
   CircleNotch,
+  Cloud,
   ComputerTower,
+  Globe,
   IdentificationCard,
   Key,
   ListPlus,
@@ -25,15 +27,13 @@ function AppCreate() {
   const [appName, setAppName] = useState('');
   const [appId, setAppId] = useState('');
   const [server, setServer] = useState('');
-
+  const [webIntegrationId, setWebIntegrationId] = useState('');
   const [loading, setLoading] = useState(false);
-
+  const [isAnonAccess, setIsAnonAccess] = useState(false);
   const [sheetsList, setSheetsList] = useState<sheetsResponseData[]>([]);
-
   const [openAddModal, setOpenAddModal] = useState(false);
 
   function handleAddSheet(data: { title: string; sheetId: string }) {
-    console.log(data);
     setSheetsList([...sheetsList, { ...data }]);
   }
 
@@ -91,7 +91,10 @@ function AppCreate() {
           name: appName,
           appId,
           server,
+          isCloud: server.includes('qlikcloud'),
+          isAnonAccess,
           sheets: sheetsList,
+          webIntegrationId,
         },
         {
           headers: {
@@ -200,14 +203,58 @@ function AppCreate() {
               </span>
             </li>
             <li className="flex space-x-3 items-center">
-              <ComputerTower size={24} className="text-zinc-900" />
+              {server.includes('qlikcloud') ? (
+                <Cloud size={24} className="text-green-600" weight="duotone" />
+              ) : (
+                <ComputerTower
+                  size={24}
+                  className="text-green-600"
+                  weight="duotone"
+                />
+              )}
               <Input
                 id="server"
                 placeholder="Server..."
                 value={server}
                 onChange={(e) => setServer(e.target.value)}
               />
+              {server.includes('qlikcloud') && (
+                <div className="flex flex-1 items-center mr-4">
+                  <Globe size={24} className="text-gray-900" />
+                  <span className="ml-2 flex-1 text-md font-medium text-gray-900">
+                    <Input
+                      id="Web Integragration"
+                      placeholder="Web Intengration ID..."
+                      value={webIntegrationId}
+                      onChange={(e) => setWebIntegrationId(e.target.value)}
+                    />
+                  </span>
+                </div>
+              )}
             </li>
+            {server.includes('qlikcloud') && (
+              <li className="flex space-x-3 items-center">
+                <span
+                  className="w-full flex flex-1 font-semibold 
+                leading-tight text-gray-600 items-center ml-9 uppercase"
+                >
+                  <input
+                    id="anon-access"
+                    type="checkbox"
+                    checked={isAnonAccess}
+                    onChange={() => setIsAnonAccess(!isAnonAccess)}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 rounded 
+                  border-gray-300 focus:ring-blue-500 focus:ring-2"
+                  />
+                  <label
+                    htmlFor="anon-access"
+                    className="ml-2 text-sm font-medium text-gray-900"
+                  >
+                    Allow anon access
+                  </label>
+                </span>
+              </li>
+            )}
           </ul>
         </form>
       </div>

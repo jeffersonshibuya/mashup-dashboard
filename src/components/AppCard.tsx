@@ -1,4 +1,13 @@
-import { CheckSquare, ComputerTower, Key, Pencil } from 'phosphor-react';
+import {
+  CheckSquare,
+  Cloud,
+  ComputerTower,
+  IdentificationBadge,
+  Key,
+  Lock,
+  Pencil,
+  UsersThree,
+} from 'phosphor-react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { useNavigate } from 'react-router-dom';
 import { sheetsResponseData } from '../types';
@@ -7,10 +16,21 @@ interface AppCardProps {
   appId: string;
   appName: string;
   server: string;
+  isCloud: boolean;
+  isAnonAccess: boolean;
+  webIntegrationId: string;
   sheets: sheetsResponseData[];
 }
 
-function AppCard({ appId, appName, server, sheets }: AppCardProps) {
+function AppCard({
+  appId,
+  appName,
+  server,
+  sheets,
+  isCloud,
+  isAnonAccess,
+  webIntegrationId,
+}: AppCardProps) {
   const navigate = useNavigate();
 
   function handleAppEdit() {
@@ -20,6 +40,9 @@ function AppCard({ appId, appName, server, sheets }: AppCardProps) {
         appName,
         server,
         sheets,
+        isCloud,
+        isAnonAccess,
+        webIntegrationId,
       },
     });
   }
@@ -79,14 +102,56 @@ function AppCard({ appId, appName, server, sheets }: AppCardProps) {
               </span>
             </li>
             <li className="flex space-x-3 items-center">
-              <ComputerTower size={24} className="text-zinc-900" />
+              {isCloud ? (
+                <Cloud size={24} className="text-green-600" weight="duotone" />
+              ) : (
+                <ComputerTower
+                  size={24}
+                  className="text-gray-600"
+                  weight="duotone"
+                />
+              )}
+              {/* <ComputerTower size={24} className="text-zinc-900" /> */}
               <span
                 className="w-full flex flex-1 justify-between font-semibold 
-              leading-tight text-gray-600"
+                leading-tight text-gray-600"
               >
-                {server}
+                {server} - {String(isAnonAccess)}
               </span>
             </li>
+            {isCloud && (
+              <li className="flex space-x-3 items-center">
+                {isAnonAccess ? (
+                  <>
+                    <UsersThree
+                      size={24}
+                      className="text-green-800"
+                      weight="duotone"
+                    />
+                    <span
+                      className="w-full flex flex-1 justify-between font-semibold 
+                      leading-tight text-gray-600"
+                    >
+                      Anon Access
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <Lock
+                      size={24}
+                      className="text-green-800"
+                      weight="duotone"
+                    />
+                    <span
+                      className="w-full flex flex-1 justify-between font-semibold 
+                      leading-tight text-gray-600"
+                    >
+                      Anon Access NOT allowed.
+                    </span>
+                  </>
+                )}
+              </li>
+            )}
           </ul>
         </Tabs.TabsContent>
         <Tabs.TabsContent

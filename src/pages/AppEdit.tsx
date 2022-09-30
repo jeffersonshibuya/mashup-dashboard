@@ -5,7 +5,9 @@ import {
   Checks,
   CheckSquare,
   CircleNotch,
+  Cloud,
   ComputerTower,
+  Globe,
   Key,
   ListPlus,
   Pencil,
@@ -28,20 +30,24 @@ interface Props {
   appId: string;
   appName: string;
   server: string;
+  webIntegrationId: string;
+  isAnonAccess: boolean;
   sheets: sheetsResponseData[];
 }
 
 function AppEdit() {
   const navigate = useNavigate();
-  const { appId, appName, server, sheets } = useLocation().state as Props;
+  const { appId, appName, server, sheets, webIntegrationId, isAnonAccess } =
+    useLocation().state as Props;
 
   const [newAppId, setNewAppId] = useState(appId);
   const [newServer, setNewServer] = useState(server);
+  const [editIsAnonAccess, setEditIsAnonAccess] = useState(isAnonAccess);
+  const [editWebIntegrationId, setEditWebIntegrationId] =
+    useState(webIntegrationId);
   const [editApp, setEditApp] = useState(false);
   const [sheetsList, setSheetsList] = useState(sheets);
-
   const [editSheet, setEditSheet] = useState({} as sheetsResponseData);
-
   const [openModal, setOpenModal] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -81,6 +87,7 @@ function AppEdit() {
 
   async function handleSaveApp(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const checkIsServerCloud = newServer.includes('qlikcloud');
     try {
       setLoading(true);
       const response: { data: { appId: string; server: string } } =
@@ -91,6 +98,9 @@ function AppEdit() {
             name: appName,
             appId: newAppId,
             server: newServer,
+            webIntegrationId: checkIsServerCloud ? editWebIntegrationId : '',
+            isAnonAccess: checkIsServerCloud ? editIsAnonAccess : false,
+            isCloud: checkIsServerCloud,
           },
           {
             headers: {
@@ -186,13 +196,6 @@ function AppEdit() {
     } catch (error) {
       toast.error('Error on add new sheet!');
     }
-
-    //   const sheetsListUpdated = response.data;
-    //   setSheetsList(sheetsListUpdated);
-    //   toast.success(`Sheet: ${sheetId} Deleted`);
-    // } catch (error) {
-    //   toast.error('Error on add new sheet!');
-    // }
   }
 
   function handleConfirmDeleteSheet(sheet: sheetsResponseData) {
@@ -460,6 +463,8 @@ function AppEdit() {
                     onClick={() => {
                       setNewServer(server);
                       setNewAppId(appId);
+                      setEditIsAnonAccess(isAnonAccess);
+                      setEditWebIntegrationId(webIntegrationId);
                       setEditApp(false);
                     }}
                     disabled={loading}
@@ -527,7 +532,15 @@ function AppEdit() {
               </span>
             </li>
             <li className="flex space-x-3 items-center">
-              <ComputerTower size={24} className="text-zinc-900" />
+              {newServer.includes('qlikcloud') ? (
+                <Cloud size={24} className="text-green-600" weight="duotone" />
+              ) : (
+                <ComputerTower
+                  size={24}
+                  className="text-green-600"
+                  weight="duotone"
+                />
+              )}
               <Input
                 id="server"
                 placeholder="server name..."
@@ -535,7 +548,45 @@ function AppEdit() {
                 onChange={(e) => setNewServer(e.target.value)}
                 disabled={!editApp}
               />
+              {newServer.includes('qlikcloud') && (
+                <div className="flex flex-1 items-center mr-4">
+                  <Globe size={24} className="text-gray-900" />
+                  <span className="ml-2 flex-1 text-md font-medium text-gray-900">
+                    <Input
+                      id="Web Integragration"
+                      disabled={!editApp}
+                      placeholder="Web Intengration ID..."
+                      value={editWebIntegrationId}
+                      onChange={(e) => setEditWebIntegrationId(e.target.value)}
+                    />
+                  </span>
+                </div>
+              )}
             </li>
+            {newServer.includes('qlikcloud') && (
+              <li className="flex space-x-3 items-center">
+                <span
+                  className="w-full flex flex-1 font-semibold 
+                leading-tight text-gray-600 items-center ml-9 uppercase"
+                >
+                  <input
+                    id="anon-access"
+                    type="checkbox"
+                    disabled={!editApp}
+                    checked={editIsAnonAccess}
+                    onChange={() => setEditIsAnonAccess(!editIsAnonAccess)}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 rounded 
+                  border-gray-300 focus:ring-blue-500 focus:ring-2"
+                  />
+                  <label
+                    htmlFor="anon-access"
+                    className="ml-2 text-sm font-medium text-gray-900"
+                  >
+                    Allow anon access
+                  </label>
+                </span>
+              </li>
+            )}
           </ul>
         </form>
       </div>
@@ -550,9 +601,9 @@ function AppEdit() {
         <button
           type="button"
           className="text-blue-500 bg-white gap-2 hover:bg-blue-400 
-                  border border-blue-200 focus:ring-4 focus:outline-none 
-                  focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-2 
-                  text-center inline-flex items-center mr-2 mb-2 hover:text-white"
+            border border-blue-200 focus:ring-4 focus:outline-none 
+            focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-2 
+            text-center inline-flex items-center mr-2 mb-2 hover:text-white"
           onClick={() => setOpenAddModal(true)}
         >
           <ListPlus size={16} />
