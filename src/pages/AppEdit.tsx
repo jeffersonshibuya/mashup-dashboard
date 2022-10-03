@@ -9,6 +9,7 @@ import {
   ComputerTower,
   Globe,
   Key,
+  LinkSimple,
   ListPlus,
   Pencil,
   Trash,
@@ -33,16 +34,25 @@ interface Props {
   webIntegrationId: string;
   isAnonAccess: boolean;
   sheets: sheetsResponseData[];
+  anonUrl: string;
 }
 
 function AppEdit() {
   const navigate = useNavigate();
-  const { appId, appName, server, sheets, webIntegrationId, isAnonAccess } =
-    useLocation().state as Props;
+  const {
+    appId,
+    appName,
+    server,
+    sheets,
+    webIntegrationId,
+    isAnonAccess,
+    anonUrl,
+  } = useLocation().state as Props;
 
   const [newAppId, setNewAppId] = useState(appId);
   const [newServer, setNewServer] = useState(server);
   const [editIsAnonAccess, setEditIsAnonAccess] = useState(isAnonAccess);
+  const [editAnonUrl, setEditAnonUrl] = useState(anonUrl);
   const [editWebIntegrationId, setEditWebIntegrationId] =
     useState(webIntegrationId);
   const [editApp, setEditApp] = useState(false);
@@ -101,6 +111,7 @@ function AppEdit() {
             webIntegrationId: checkIsServerCloud ? editWebIntegrationId : '',
             isAnonAccess: checkIsServerCloud ? editIsAnonAccess : false,
             isCloud: checkIsServerCloud,
+            anonUrl: !editIsAnonAccess ? false : editAnonUrl,
           },
           {
             headers: {
@@ -465,6 +476,7 @@ function AppEdit() {
                       setNewAppId(appId);
                       setEditIsAnonAccess(isAnonAccess);
                       setEditWebIntegrationId(webIntegrationId);
+                      setEditAnonUrl(anonUrl);
                       setEditApp(false);
                     }}
                     disabled={loading}
@@ -564,6 +576,44 @@ function AppEdit() {
               )}
             </li>
             {newServer.includes('qlikcloud') && (
+              <li className="grid grid-cols-4 space-x-3 items-center">
+                <div
+                  className="flex flex-1 font-semibold py-2
+                  leading-tight text-gray-600 items-center uppercase"
+                >
+                  <input
+                    id="anon-access"
+                    type="checkbox"
+                    disabled={!editApp}
+                    checked={editIsAnonAccess}
+                    onChange={() => setEditIsAnonAccess(!editIsAnonAccess)}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 rounded 
+                  border-gray-300 focus:ring-blue-500 focus:ring-2"
+                  />
+                  <label
+                    htmlFor="anon-access"
+                    className="ml-2 text-sm font-medium text-gray-900"
+                  >
+                    Allow anon access
+                  </label>
+                </div>
+                {editIsAnonAccess && (
+                  <div className="flex items-center mr-4 col-span-3">
+                    <LinkSimple size={24} className="text-gray-900" />
+                    <span className="flex-1 ml-2 text-md font-medium text-gray-900">
+                      <Input
+                        id="Web Integragration"
+                        placeholder="Anon JWT URL..."
+                        value={editAnonUrl}
+                        disabled={!editApp}
+                        onChange={(e) => setEditAnonUrl(e.target.value)}
+                      />
+                    </span>
+                  </div>
+                )}
+              </li>
+            )}
+            {/* {newServer.includes('qlikcloud') && (
               <li className="flex space-x-3 items-center">
                 <span
                   className="w-full flex flex-1 font-semibold 
@@ -586,7 +636,7 @@ function AppEdit() {
                   </label>
                 </span>
               </li>
-            )}
+            )} */}
           </ul>
         </form>
       </div>

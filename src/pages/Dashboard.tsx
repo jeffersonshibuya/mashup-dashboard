@@ -78,6 +78,7 @@ function Dashboard() {
                 isCloud={app.isCloud || false}
                 isAnonAccess={app.isAnonAccess || false}
                 webIntegrationId={app.webIntegrationId || ''}
+                anonUrl={app.anonUrl || ''}
               />
             ))}
           </div>

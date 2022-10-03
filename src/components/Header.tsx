@@ -1,6 +1,10 @@
+import { useUserAuth } from '../context/UserAuthXContext';
+
 function Header() {
+  const { user } = useUserAuth();
+
   return (
-    <header className="header bg-white shadow py-4 px-4">
+    <header className="header bg-white shadow py-4 px-4  sticky top-0 ">
       <div className="header-content flex items-center flex-row">
         <form action="#">
           <div className="hidden md:flex relative">
@@ -53,11 +57,11 @@ function Header() {
               className="h-10 w-10 bg-gray-200 border rounded-full"
             />
             <span className="flex flex-col ml-2">
-              <span className="truncate w-20 font-semibold tracking-wide leading-none">
-                John Doe
+              <span className="font-semibold tracking-wide leading-none">
+                {user.name}
               </span>
-              <span className="truncate w-20 text-gray-500 text-xs leading-none mt-1">
-                Manager
+              <span className="text-gray-500 text-xs leading-none mt-1">
+                {user.email}
               </span>
             </span>
           </a>

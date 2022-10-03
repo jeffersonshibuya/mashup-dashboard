@@ -2,13 +2,17 @@ import {
   CheckSquare,
   Cloud,
   ComputerTower,
+  Copy,
   Key,
+  LinkSimple,
   Lock,
   Pencil,
   UsersThree,
 } from 'phosphor-react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { useNavigate } from 'react-router-dom';
+import { Tooltip, Button } from 'flowbite-react';
+import { toast } from 'react-toastify';
 import { sheetsResponseData } from '../types';
 
 interface AppCardProps {
@@ -17,6 +21,7 @@ interface AppCardProps {
   server: string;
   isCloud: boolean;
   isAnonAccess: boolean;
+  anonUrl: string;
   webIntegrationId: string;
   sheets: sheetsResponseData[];
 }
@@ -29,6 +34,7 @@ function AppCard({
   isCloud,
   isAnonAccess,
   webIntegrationId,
+  anonUrl,
 }: AppCardProps) {
   const navigate = useNavigate();
 
@@ -42,6 +48,7 @@ function AppCard({
         isCloud,
         isAnonAccess,
         webIntegrationId,
+        anonUrl,
       },
     });
   }
@@ -92,12 +99,21 @@ function AppCard({
         <Tabs.TabsContent value="tab1" className="border-none h-[200px]">
           <ul className="my-5 space-y-5">
             <li className="flex space-x-3 items-center">
-              <Key size={24} className="text-gray-900" />
+              <Key size={24} className="text-gray-900" weight="duotone" />
               <span
                 className="w-full flex flex-1 justify-between font-semibold 
-              leading-tight text-gray-600"
+                leading-tight text-gray-600"
               >
                 {appId}
+                <Copy
+                  onClick={() => {
+                    toast.success(`App ID Copied!`);
+                    navigator.clipboard.writeText(appId);
+                  }}
+                  size={20}
+                  weight="bold"
+                  className="cursor-pointer"
+                />
               </span>
             </li>
             <li className="flex space-x-3 items-center">
@@ -110,12 +126,11 @@ function AppCard({
                   weight="duotone"
                 />
               )}
-              {/* <ComputerTower size={24} className="text-zinc-900" /> */}
               <span
                 className="w-full flex flex-1 justify-between font-semibold 
                 leading-tight text-gray-600"
               >
-                {server} - {String(isAnonAccess)}
+                {server}
               </span>
             </li>
             {isCloud && (
@@ -151,6 +166,22 @@ function AppCard({
                 )}
               </li>
             )}
+            <li className="flex space-x-3 items-center">
+              <LinkSimple
+                size={24}
+                className="text-blue-300"
+                weight="regular"
+              />
+              <a
+                href={`http://localhost:3000/${appName}`}
+                target="_blank"
+                className="flex justify-between font-semibold transition-all duration-300
+              leading-tight text-blue-300 hover:text-blue-800"
+                rel="noreferrer"
+              >
+                view site
+              </a>
+            </li>
           </ul>
         </Tabs.TabsContent>
         <Tabs.TabsContent

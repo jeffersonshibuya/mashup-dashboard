@@ -1,8 +1,11 @@
-import { ChartPieSlice, FolderPlus, PlusCircle } from 'phosphor-react';
+import { ChartPieSlice, FolderPlus, PlusCircle, SignOut } from 'phosphor-react';
 import { NavLink } from 'react-router-dom';
 import logo from '../assets/logo_rbg.png';
+import { useUserAuth } from '../context/UserAuthXContext';
 
 function Sidebar() {
+  const { handleSignOut } = useUserAuth();
+
   return (
     <aside
       className="sidebar w-64 transform -translate-x-full 
@@ -42,6 +45,25 @@ function Sidebar() {
               </span>
               <span className="ml-3">Add New App</span>
             </NavLink>
+          </li>
+          <li className="my-px">
+            <span
+              className="flex font-medium text-sm text-gray-400 px-4 my-4 
+              uppercase"
+            >
+              Config
+            </span>
+          </li>
+          <li className="my-px">
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="flex w-full flex-row items-center h-10 px-3 rounded-lg 
+              text-gray-700 hover:bg-gray-600 hover:text-white"
+            >
+              <SignOut size={22} />
+              <span className="ml-3">Sign out</span>
+            </button>
           </li>
         </ul>
       </div>

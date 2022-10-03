@@ -11,6 +11,8 @@ import {
   Globe,
   IdentificationCard,
   Key,
+  Link,
+  LinkSimple,
   ListPlus,
   Trash,
   Warning,
@@ -28,6 +30,7 @@ function AppCreate() {
   const [appId, setAppId] = useState('');
   const [server, setServer] = useState('');
   const [webIntegrationId, setWebIntegrationId] = useState('');
+  const [anonUrl, setAnonUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [isAnonAccess, setIsAnonAccess] = useState(false);
   const [sheetsList, setSheetsList] = useState<sheetsResponseData[]>([]);
@@ -73,6 +76,12 @@ function AppCreate() {
                 Server
               </dt>
             )}
+            {isAnonAccess && anonUrl === '' && (
+              <dt className="mb-1 text-gray-700 flex items-center gap-2">
+                <LinkSimple size={18} color="red" weight="duotone" />
+                Anon URL
+              </dt>
+            )}
           </div>
         </div>,
         {
@@ -95,6 +104,7 @@ function AppCreate() {
           isAnonAccess,
           sheets: sheetsList,
           webIntegrationId,
+          anonUrl,
         },
         {
           headers: {
@@ -233,10 +243,10 @@ function AppCreate() {
               )}
             </li>
             {server.includes('qlikcloud') && (
-              <li className="flex space-x-3 items-center">
-                <span
-                  className="w-full flex flex-1 font-semibold 
-                leading-tight text-gray-600 items-center ml-9 uppercase"
+              <li className="grid grid-cols-4 space-x-3 items-center">
+                <div
+                  className="flex flex-1 font-semibold py-2
+                  leading-tight text-gray-600 items-center uppercase"
                 >
                   <input
                     id="anon-access"
@@ -244,7 +254,7 @@ function AppCreate() {
                     checked={isAnonAccess}
                     onChange={() => setIsAnonAccess(!isAnonAccess)}
                     className="w-4 h-4 text-blue-600 bg-gray-100 rounded 
-                  border-gray-300 focus:ring-blue-500 focus:ring-2"
+                    border-gray-300 focus:ring-blue-500 focus:ring-2"
                   />
                   <label
                     htmlFor="anon-access"
@@ -252,7 +262,20 @@ function AppCreate() {
                   >
                     Allow anon access
                   </label>
-                </span>
+                </div>
+                {isAnonAccess && (
+                  <div className="flex items-center mr-4 col-span-3">
+                    <LinkSimple size={24} className="text-gray-900" />
+                    <span className="flex-1 ml-2 text-md font-medium text-gray-900">
+                      <Input
+                        id="Web Integragration"
+                        placeholder="Anon JWT URL..."
+                        value={anonUrl}
+                        onChange={(e) => setAnonUrl(e.target.value)}
+                      />
+                    </span>
+                  </div>
+                )}
               </li>
             )}
           </ul>

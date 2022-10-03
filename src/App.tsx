@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
@@ -10,10 +11,12 @@ import AppEdit from './pages/AppEdit';
 import NotFound from './pages/NotFound';
 import Dashboard from './pages/Dashboard';
 import AppCreate from './pages/AppCreate';
+import { User } from './types';
 
 import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { UserAuthProvider } from './context/UserAuthXContext';
 
 export function App() {
   return (
@@ -25,7 +28,10 @@ export function App() {
           <ToastContainer autoClose={1500} />
           {/* <h1 className="font-bold text-2xl text-gray-700">Dashboard</h1> */}
 
-          <div className="flex flex-col flex-1 p-2 border border-gray-200 bg-white rounded">
+          <div
+            className="flex flex-col flex-1 p-2 border border-gray-200
+            bg-white rounded"
+          >
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/app-edit" element={<AppEdit />} />
@@ -41,10 +47,12 @@ export function App() {
   );
 }
 
-export function WrappedApp() {
+export function WrappedApp({ user }: { user: User }) {
   return (
     <HashRouter>
-      <App />
+      <UserAuthProvider userInfo={user}>
+        <App />
+      </UserAuthProvider>
     </HashRouter>
   );
 }
