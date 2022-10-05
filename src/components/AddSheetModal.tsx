@@ -62,7 +62,7 @@ export default function AddSheetModal({
                   className="text-lg font-medium leading-6 text-gray-900 flex 
                     justify-between items-center"
                 >
-                  <span>Edit Sheet</span>
+                  <span>Add Sheet</span>
                   <button
                     onClick={() => setIsOpen(false)}
                     type="button"

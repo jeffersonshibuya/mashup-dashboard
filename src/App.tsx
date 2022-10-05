@@ -17,6 +17,7 @@ import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { UserAuthProvider } from './context/UserAuthXContext';
+import Servers from './pages/Servers';
 
 export function App() {
   return (
@@ -36,6 +37,7 @@ export function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="/app-edit" element={<AppEdit />} />
               <Route path="/app-create" element={<AppCreate />} />
+              <Route path="/servers" element={<Servers />} />
               <Route path="/home" element={<Home />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

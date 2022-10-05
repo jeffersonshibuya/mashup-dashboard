@@ -6,35 +6,32 @@ import {
   Key,
   LinkSimple,
   Lock,
+  LockKeyOpen,
   Pencil,
-  UsersThree,
 } from 'phosphor-react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { useNavigate } from 'react-router-dom';
-import { Tooltip, Button } from 'flowbite-react';
 import { toast } from 'react-toastify';
 import { sheetsResponseData } from '../types';
 
 interface AppCardProps {
   appId: string;
   appName: string;
-  server: string;
+  serverName: string;
+  serverUrl: string;
   isCloud: boolean;
   isAnonAccess: boolean;
-  anonUrl: string;
-  webIntegrationId: string;
   sheets: sheetsResponseData[];
 }
 
 function AppCard({
   appId,
   appName,
-  server,
+  serverName,
+  serverUrl,
   sheets,
   isCloud,
   isAnonAccess,
-  webIntegrationId,
-  anonUrl,
 }: AppCardProps) {
   const navigate = useNavigate();
 
@@ -43,12 +40,8 @@ function AppCard({
       state: {
         appId,
         appName,
-        server,
+        serverName,
         sheets,
-        isCloud,
-        isAnonAccess,
-        webIntegrationId,
-        anonUrl,
       },
     });
   }
@@ -58,22 +51,19 @@ function AppCard({
       className="w-full bg-white rounded-lg border border-gray-300 
         shadow-md p-4"
     >
-      <h5
-        className="mb-4 flex justify-between text-xl font-semibold 
-      text-gray-600"
-      >
-        APP: {appName}
+      <div className="flex flex-1 items-center justify-between mb-4">
+        <h5 className="flex font-bold  text-gray-600">{appName}</h5>
         <button
           type="button"
           onClick={handleAppEdit}
           className="flex text-sm items-center gap-2 border-solid
-           rounded  transition-all duration-200
-           bg-blue-400 hover:bg-blue-600 px-2 py-1 text-white"
+            rounded transition-all duration-200 font-normal
+            bg-blue-400 hover:bg-blue-600 px-2 py-1 text-white"
         >
           <Pencil onClick={handleAppEdit} size={18} />
           Edit
         </button>
-      </h5>
+      </div>
       <Tabs.Tabs defaultValue="tab1">
         <Tabs.TabsList className="flex" aria-label="app info">
           <Tabs.TabsTrigger
@@ -110,7 +100,7 @@ function AppCard({
                     toast.success(`App ID Copied!`);
                     navigator.clipboard.writeText(appId);
                   }}
-                  size={20}
+                  size={18}
                   weight="bold"
                   className="cursor-pointer"
                 />
@@ -126,18 +116,27 @@ function AppCard({
                   weight="duotone"
                 />
               )}
-              <span
-                className="w-full flex flex-1 justify-between font-semibold 
-                leading-tight text-gray-600"
-              >
-                {server}
-              </span>
+              <div className="flex flex-1 items-center justify-between">
+                <div className="flex flex-col font-semibold text-gray-600">
+                  {serverName}
+                  <span className="text-gray-500 text-sm">{serverUrl}</span>
+                </div>
+                <Copy
+                  onClick={() => {
+                    toast.success(`Server URL Copied!`);
+                    navigator.clipboard.writeText(serverUrl);
+                  }}
+                  size={18}
+                  weight="bold"
+                  className="cursor-pointer text-gray-600"
+                />
+              </div>
             </li>
             {isCloud && (
               <li className="flex space-x-3 items-center">
                 {isAnonAccess ? (
                   <>
-                    <UsersThree
+                    <LockKeyOpen
                       size={24}
                       className="text-green-800"
                       weight="duotone"
@@ -160,7 +159,7 @@ function AppCard({
                       className="w-full flex flex-1 justify-between font-semibold 
                       leading-tight text-gray-600"
                     >
-                      Anon Access NOT allowed.
+                      Restricted Access.
                     </span>
                   </>
                 )}
@@ -176,7 +175,7 @@ function AppCard({
                 href={`http://localhost:3000/${appName}`}
                 target="_blank"
                 className="flex justify-between font-semibold transition-all duration-300
-              leading-tight text-blue-300 hover:text-blue-800"
+              leading-tight text-blue-500 hover:text-blue-800"
                 rel="noreferrer"
               >
                 view site

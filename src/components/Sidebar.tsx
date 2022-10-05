@@ -1,4 +1,10 @@
-import { ChartPieSlice, FolderPlus, PlusCircle, SignOut } from 'phosphor-react';
+import {
+  ChartPieSlice,
+  FolderPlus,
+  HardDrives,
+  PlusCircle,
+  SignOut,
+} from 'phosphor-react';
 import { NavLink } from 'react-router-dom';
 import logo from '../assets/logo_rbg.png';
 import { useUserAuth } from '../context/UserAuthXContext';
@@ -53,6 +59,16 @@ function Sidebar() {
             >
               Config
             </span>
+          </li>
+          <li className="my-px">
+            <NavLink
+              to="servers"
+              className="flex w-full flex-row items-center h-10 px-3 rounded-lg 
+              text-gray-700 hover:bg-gray-600 hover:text-white"
+            >
+              <HardDrives size={22} />
+              <span className="ml-3">Servers</span>
+            </NavLink>
           </li>
           <li className="my-px">
             <button

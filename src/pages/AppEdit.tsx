@@ -7,9 +7,7 @@ import {
   CircleNotch,
   Cloud,
   ComputerTower,
-  Globe,
   Key,
-  LinkSimple,
   ListPlus,
   Pencil,
   Trash,
@@ -18,43 +16,30 @@ import {
   XCircle,
 } from 'phosphor-react';
 import { confirmAlert } from 'react-confirm-alert';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import AddSheetModal from '../components/AddSheetModal';
 import { Input } from '../components/Form/Input';
 import AppModal from '../components/Modal';
 import { api } from '../services/api';
-import { sheetsResponseData } from '../types';
+import { ServersDataType, sheetsResponseData } from '../types';
 
 interface Props {
   appId: string;
   appName: string;
-  server: string;
-  webIntegrationId: string;
-  isAnonAccess: boolean;
+  serverName: string;
   sheets: sheetsResponseData[];
-  anonUrl: string;
 }
 
 function AppEdit() {
   const navigate = useNavigate();
-  const {
-    appId,
-    appName,
-    server,
-    sheets,
-    webIntegrationId,
-    isAnonAccess,
-    anonUrl,
-  } = useLocation().state as Props;
+  const { appId, appName, serverName, sheets } = useLocation().state as Props;
 
+  const [servers, setServers] = useState<ServersDataType>([]);
   const [newAppId, setNewAppId] = useState(appId);
-  const [newServer, setNewServer] = useState(server);
-  const [editIsAnonAccess, setEditIsAnonAccess] = useState(isAnonAccess);
-  const [editAnonUrl, setEditAnonUrl] = useState(anonUrl);
-  const [editWebIntegrationId, setEditWebIntegrationId] =
-    useState(webIntegrationId);
+  const [newServer, setNewServer] = useState(serverName);
+
   const [editApp, setEditApp] = useState(false);
   const [sheetsList, setSheetsList] = useState(sheets);
   const [editSheet, setEditSheet] = useState({} as sheetsResponseData);
@@ -97,7 +82,6 @@ function AppEdit() {
 
   async function handleSaveApp(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const checkIsServerCloud = newServer.includes('qlikcloud');
     try {
       setLoading(true);
       const response: { data: { appId: string; server: string } } =
@@ -108,10 +92,6 @@ function AppEdit() {
             name: appName,
             appId: newAppId,
             server: newServer,
-            webIntegrationId: checkIsServerCloud ? editWebIntegrationId : '',
-            isAnonAccess: checkIsServerCloud ? editIsAnonAccess : false,
-            isCloud: checkIsServerCloud,
-            anonUrl: !editIsAnonAccess ? false : editAnonUrl,
           },
           {
             headers: {
@@ -407,6 +387,26 @@ function AppEdit() {
     });
   }
 
+  useEffect(() => {
+    async function init() {
+      const serversResponse = await api.post<ServersDataType>(
+        '/servers',
+        {
+          action: 'list',
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      setServers(serversResponse.data);
+    }
+
+    init();
+  }, []);
+
   return (
     <>
       <div className="flex items-center justify-between pb-4 border-b border-gray-300">
@@ -466,17 +466,14 @@ function AppEdit() {
             className="flex justify-between border-b border-gray-400 
            items-center"
           >
-            <h1>APP Info</h1>
+            <h1 className="text-lg text-gray-900 font-semibold">{appName}</h1>
             {editApp ? (
               <div className="flex justify-end gap-2">
                 {!loading && (
                   <button
                     onClick={() => {
-                      setNewServer(server);
                       setNewAppId(appId);
-                      setEditIsAnonAccess(isAnonAccess);
-                      setEditWebIntegrationId(webIntegrationId);
-                      setEditAnonUrl(anonUrl);
+                      setNewServer(serverName);
                       setEditApp(false);
                     }}
                     disabled={loading}
@@ -533,7 +530,10 @@ function AppEdit() {
           <ul className="my-3 space-y-5">
             <li className="flex space-x-3 items-center">
               <Key size={24} className="text-gray-900" />
-              <span className="w-full flex flex-1 justify-between font-semibold leading-tight text-gray-600">
+              <span
+                className="w-full flex flex-1 justify-between font-semibold 
+                leading-tight text-gray-600"
+              >
                 <Input
                   id="appId"
                   placeholder="App ID..."
@@ -553,90 +553,31 @@ function AppEdit() {
                   weight="duotone"
                 />
               )}
-              <Input
+              <select
                 id="server"
-                placeholder="server name..."
                 value={newServer}
-                onChange={(e) => setNewServer(e.target.value)}
                 disabled={!editApp}
-              />
-              {newServer.includes('qlikcloud') && (
-                <div className="flex flex-1 items-center mr-4">
-                  <Globe size={24} className="text-gray-900" />
-                  <span className="ml-2 flex-1 text-md font-medium text-gray-900">
-                    <Input
-                      id="Web Integragration"
-                      disabled={!editApp}
-                      placeholder="Web Intengration ID..."
-                      value={editWebIntegrationId}
-                      onChange={(e) => setEditWebIntegrationId(e.target.value)}
-                    />
-                  </span>
-                </div>
-              )}
+                onChange={(e) => setNewServer(e.target.value)}
+                name="server"
+                className="w-full bg-white py-2 px-4 flex-1 text-gray-900 rounded text-sm 
+                placeholder:text-gray-400 border border-zinc-400 focus:outline-1 
+                focus:outline-zinc-500 disabled:bg-gray-200 disabled:cursor-not-allowed 
+                disabled:text-gray-800 font-semibold peer"
+              >
+                <option value="" defaultValue="" disabled>
+                  SELECT THE SERVER...
+                </option>
+                {servers.map((serverData) => (
+                  <option
+                    key={serverData.name}
+                    value={serverData.name}
+                    className="font-semibold text-gray-600"
+                  >
+                    {serverData.name} [{serverData.serverUrl}]
+                  </option>
+                ))}
+              </select>
             </li>
-            {newServer.includes('qlikcloud') && (
-              <li className="grid grid-cols-4 space-x-3 items-center">
-                <div
-                  className="flex flex-1 font-semibold py-2
-                  leading-tight text-gray-600 items-center uppercase"
-                >
-                  <input
-                    id="anon-access"
-                    type="checkbox"
-                    disabled={!editApp}
-                    checked={editIsAnonAccess}
-                    onChange={() => setEditIsAnonAccess(!editIsAnonAccess)}
-                    className="w-4 h-4 text-blue-600 bg-gray-100 rounded 
-                  border-gray-300 focus:ring-blue-500 focus:ring-2"
-                  />
-                  <label
-                    htmlFor="anon-access"
-                    className="ml-2 text-sm font-medium text-gray-900"
-                  >
-                    Allow anon access
-                  </label>
-                </div>
-                {editIsAnonAccess && (
-                  <div className="flex items-center mr-4 col-span-3">
-                    <LinkSimple size={24} className="text-gray-900" />
-                    <span className="flex-1 ml-2 text-md font-medium text-gray-900">
-                      <Input
-                        id="Web Integragration"
-                        placeholder="Anon JWT URL..."
-                        value={editAnonUrl}
-                        disabled={!editApp}
-                        onChange={(e) => setEditAnonUrl(e.target.value)}
-                      />
-                    </span>
-                  </div>
-                )}
-              </li>
-            )}
-            {/* {newServer.includes('qlikcloud') && (
-              <li className="flex space-x-3 items-center">
-                <span
-                  className="w-full flex flex-1 font-semibold 
-                leading-tight text-gray-600 items-center ml-9 uppercase"
-                >
-                  <input
-                    id="anon-access"
-                    type="checkbox"
-                    disabled={!editApp}
-                    checked={editIsAnonAccess}
-                    onChange={() => setEditIsAnonAccess(!editIsAnonAccess)}
-                    className="w-4 h-4 text-blue-600 bg-gray-100 rounded 
-                  border-gray-300 focus:ring-blue-500 focus:ring-2"
-                  />
-                  <label
-                    htmlFor="anon-access"
-                    className="ml-2 text-sm font-medium text-gray-900"
-                  >
-                    Allow anon access
-                  </label>
-                </span>
-              </li>
-            )} */}
           </ul>
         </form>
       </div>

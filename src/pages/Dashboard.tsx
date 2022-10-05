@@ -67,21 +67,41 @@ function Dashboard() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-3 gap-3">
-            {apps?.map((app) => (
-              <AppCard
-                key={app.name}
-                appId={app.appId}
-                appName={app.name}
-                server={app.server}
-                sheets={app.sheets}
-                isCloud={app.isCloud || false}
-                isAnonAccess={app.isAnonAccess || false}
-                webIntegrationId={app.webIntegrationId || ''}
-                anonUrl={app.anonUrl || ''}
-              />
-            ))}
-          </div>
+          {apps?.length === 0 ? (
+            <div
+              className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4"
+              role="alert"
+            >
+              <p className="font-bold">No apps found!</p>
+              <p className="mt-4">
+                <NavLink
+                  to="/app-create"
+                  className="text-blue-500 bg-white gap-2 hover:bg-blue-400 
+                    border border-blue-200 focus:ring-4 focus:outline-none 
+                    focus:ring-gray-100 font-medium rounded-lg text-xs px-3 py-2 
+                    text-center inline-flex items-center mr-2 hover:text-white"
+                >
+                  <FolderPlus size={16} />
+                  Add New App
+                </NavLink>
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-3 gap-3">
+              {apps?.map((app) => (
+                <AppCard
+                  key={app.name}
+                  appId={app.appId}
+                  appName={app.name}
+                  serverName={app.server.name}
+                  serverUrl={app.server.serverUrl}
+                  sheets={app.sheets}
+                  isCloud={app.server.isCloud || false}
+                  isAnonAccess={app.server.isAnonAccess || false}
+                />
+              ))}
+            </div>
+          )}
         </>
       )}
     </>

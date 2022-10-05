@@ -1,12 +1,17 @@
 export type mashupConfigData = {
-  server: string;
+  server: ServerData;
   name: string;
   appId: string;
-  isCloud?: boolean;
-  isAnonAccess?: boolean;
-  webIntegrationId?: string;
   sheets: sheetsResponseData[];
-  anonUrl?: string;
+};
+
+export type ServerData = {
+  name: string;
+  serverUrl: string;
+  isCloud: boolean;
+  isAnonAccess: boolean;
+  webIntegrationId: string;
+  anonUrl: string;
 };
 
 export type sheetsResponseData = {
@@ -25,3 +30,4 @@ export type UserAuthContextType = {
 };
 
 export type appsDataType = mashupConfigData[];
+export type ServersDataType = ServerData[];
