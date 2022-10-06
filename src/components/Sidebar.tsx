@@ -1,5 +1,6 @@
 import {
   ChartPieSlice,
+  FileText,
   FolderPlus,
   HardDrives,
   PlusCircle,
@@ -80,6 +81,17 @@ function Sidebar() {
               <SignOut size={22} />
               <span className="ml-3">Sign out</span>
             </button>
+          </li>
+          <li className="my-px">
+            <a
+              href="https://ipc-global.atlassian.net/l/cp/ZcNVjf11"
+              target="_blank"
+              className="flex w-full flex-row items-center h-10 px-3 text-blue-700"
+              rel="noreferrer"
+            >
+              <FileText size={22} />
+              <span className="ml-3">Documentation</span>
+            </a>
           </li>
         </ul>
       </div>

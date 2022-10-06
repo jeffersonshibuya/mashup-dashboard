@@ -32,7 +32,9 @@ function AppCreate() {
   const [serverSelected, setServerSelected] = useState('');
 
   function handleAddSheet(data: { title: string; sheetId: string }) {
+    setLoading(true);
     setSheetsList([...sheetsList, { ...data }]);
+    setLoading(false);
   }
 
   function handleRemoveSheet(sheet: sheetsResponseData) {

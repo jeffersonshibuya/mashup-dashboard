@@ -2,6 +2,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { CheckCircle, CircleNotch, X } from 'phosphor-react';
 import { Fragment, useState } from 'react';
+import { toast } from 'react-toastify';
 import { Input } from './Form/Input';
 
 interface Props {
@@ -22,6 +23,7 @@ export default function AddSheetModal({
 
   function handleAddNewSheet() {
     handleSave({ title, sheetId });
+    toast.success(`APP: ${title} Added`);
     setTitle('');
     setSheetId('');
   }
