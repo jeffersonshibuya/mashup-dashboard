@@ -1,7 +1,6 @@
 import {
   ChartPieSlice,
   FileText,
-  FolderPlus,
   HardDrives,
   PlusCircle,
   SignOut,
