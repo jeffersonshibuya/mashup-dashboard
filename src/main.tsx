@@ -17,7 +17,9 @@ function loadPage({ user }: { user: User }) {
 (async function getApp() {
   const auth = new Auth(config);
 
-  if (!auth.isAuthenticated()) {
+  const isAuthenticated = await auth.isAuthenticated();
+
+  if (!isAuthenticated) {
     // checks the "/users/me" endpoint
     auth.authenticate(); // redirects to IDP login page
   } else {

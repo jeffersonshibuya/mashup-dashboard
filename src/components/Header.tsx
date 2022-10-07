@@ -3,10 +3,15 @@ import { useUserAuth } from '../context/UserAuthXContext';
 function Header() {
   const { user } = useUserAuth();
 
+  const fullNameArray = user.name.split(' ');
+  const avatarName =
+    fullNameArray[0].charAt(0).toUpperCase() +
+    fullNameArray[1].charAt(0).toUpperCase();
+
   return (
-    <header className="header bg-white shadow py-4 px-4  sticky top-0 ">
+    <header className="header bg-white shadow py-4 px-4 ">
       <div className="header-content flex items-center flex-row">
-        <form action="#">
+        {/* <form action="#">
           <div className="hidden md:flex relative">
             <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
               <svg
@@ -48,14 +53,15 @@ function Header() {
               </svg>
             </a>
           </div>
-        </form>
+        </form> */}
         <div className="flex ml-auto">
-          <a href="/#" className="flex flex-row items-center">
-            <img
-              src="https://pbs.twimg.com/profile_images/378800000298815220/b567757616f720812125bfbac395ff54_normal.png"
-              alt="something"
-              className="h-10 w-10 bg-gray-200 border rounded-full"
-            />
+          <div className="flex flex-row items-center">
+            <div
+              className="h-11 w-11 flex bg-[#0C396E]/90 border rounded-full 
+              justify-center items-center font-bold text-white shadow tracking-wider"
+            >
+              {avatarName}
+            </div>
             <span className="flex flex-col ml-2">
               <span className="font-semibold tracking-wide leading-none">
                 {user.name}
@@ -64,7 +70,7 @@ function Header() {
                 {user.email}
               </span>
             </span>
-          </a>
+          </div>
         </div>
       </div>
     </header>

@@ -6,7 +6,14 @@ import { App, WrappedApp } from './App';
 
 describe('App', () => {
   it('renders hello world!', () => {
-    render(<WrappedApp />);
+    render(
+      <WrappedApp
+        user={{
+          name: '',
+          email: '',
+        }}
+      />
+    );
 
     expect(
       screen.getByRole('heading', {
