@@ -7,7 +7,7 @@ import {
 } from 'phosphor-react';
 import { NavLink } from 'react-router-dom';
 import logo from '../assets/logo_rbg.png';
-import { useUserAuth } from '../context/UserAuthXContext';
+import { useUserAuth } from '../context/UserAuthContext';
 
 function Sidebar() {
   const { handleSignOut } = useUserAuth();

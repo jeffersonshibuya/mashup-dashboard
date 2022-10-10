@@ -1,5 +1,7 @@
-import { Auth } from '@qlik/sdk';
+// import { Auth } from '@qlik/sdk';
 import { createContext, useContext, useState } from 'react';
+import { Auth } from '@qlik/sdk';
+
 import { User, UserAuthContextType } from '../types';
 import { config } from '../utils/AuthConfig';
 

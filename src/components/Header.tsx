@@ -1,4 +1,4 @@
-import { useUserAuth } from '../context/UserAuthXContext';
+import { useUserAuth } from '../context/UserAuthContext';
 
 function Header() {
   const { user } = useUserAuth();

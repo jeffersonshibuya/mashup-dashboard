@@ -16,7 +16,7 @@ import { User } from './types';
 import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { UserAuthProvider } from './context/UserAuthXContext';
+import { UserAuthProvider } from './context/UserAuthContext';
 import Servers from './pages/Servers';
 
 export function App() {
