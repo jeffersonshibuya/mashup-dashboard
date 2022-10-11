@@ -49,16 +49,19 @@ function AppCard({
   return (
     <div
       className="w-full bg-white rounded-lg border border-gray-300 
-        shadow-md p-4"
+        shadow-lg p-4 dark:bg-gray-800 dark:text-white dark:border-gray-600"
     >
       <div className="flex flex-1 items-center justify-between mb-4">
-        <h5 className="flex font-bold  text-gray-600">{appName}</h5>
+        <h5 className="flex font-bold dark:text-white text-gray-600">
+          {appName}
+        </h5>
         <button
           type="button"
           onClick={handleAppEdit}
           className="flex text-sm items-center gap-2 border-solid
             rounded transition-all duration-200 font-normal
-            bg-blue-400 hover:bg-blue-600 px-2 py-1 text-white"
+            dark:bg-gray-900 bg-blue-400 hover:bg-blue-600 px-2 py-1 
+            text-white"
         >
           <Pencil onClick={handleAppEdit} size={18} />
           Edit
@@ -68,18 +71,19 @@ function AppCard({
         <Tabs.TabsList className="flex" aria-label="app info">
           <Tabs.TabsTrigger
             className="h-11 flex-1 px-5 items-center border-b border-gray-400
-             justify-center"
+             justify-center dark:border-gray-900"
             value="tab1"
           >
             APP Info
           </Tabs.TabsTrigger>
           <Tabs.TabsTrigger
-            className="h-11 flex-1 px-5 items-center border-b border-gray-400"
+            className="h-11 flex-1 px-5 items-center border-b border-gray-400
+            dark:border-gray-900"
             value="tab2"
           >
             Sheets
             <span
-              className="bg-green-200 text-green-800 text-sm font-medium 
+              className="bg-green-200 dark:bg-green-400 text-green-800 text-sm font-medium 
               ml-2 px-2.5 py-0.5 rounded"
             >
               {sheets.length}
@@ -89,10 +93,14 @@ function AppCard({
         <Tabs.TabsContent value="tab1" className="border-none h-[200px]">
           <ul className="my-5 space-y-5">
             <li className="flex space-x-3 items-center">
-              <Key size={24} className="text-gray-900" weight="duotone" />
+              <Key
+                size={24}
+                className="text-gray-900 dark:text-gray-400"
+                weight="duotone"
+              />
               <span
                 className="w-full flex flex-1 justify-between font-semibold 
-                leading-tight text-gray-600"
+                leading-tight text-gray-600 dark:text-gray-300"
               >
                 {appId}
                 <Copy
@@ -112,14 +120,16 @@ function AppCard({
               ) : (
                 <ComputerTower
                   size={24}
-                  className="text-gray-600"
+                  className="text-gray-600 dark:text-gray-400"
                   weight="duotone"
                 />
               )}
               <div className="flex flex-1 items-center justify-between">
-                <div className="flex flex-col font-semibold text-gray-600">
+                <div className="flex flex-col font-semibold text-gray-600 dark:text-gray-300">
                   {serverName}
-                  <span className="text-gray-500 text-sm">{serverUrl}</span>
+                  <span className="text-gray-500 text-sm dark:text-gray-500">
+                    {serverUrl}
+                  </span>
                 </div>
                 <Copy
                   onClick={() => {
@@ -143,7 +153,7 @@ function AppCard({
                     />
                     <span
                       className="w-full flex flex-1 justify-between font-semibold 
-                      leading-tight text-gray-600"
+                      leading-tight text-gray-600 dark:text-gray-300"
                     >
                       Anon Access
                     </span>

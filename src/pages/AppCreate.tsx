@@ -134,7 +134,7 @@ function AppCreate() {
               <NavLink
                 to="/"
                 className="inline-flex items-center text font-medium 
-                text-gray-400 hover:text-gray-800"
+                text-gray-400 hover:text-gray-800 dark:hover:text-gray-100"
               >
                 <ChartPieSlice weight="fill" className="mr-1" />
                 Dashboard
@@ -143,7 +143,10 @@ function AppCreate() {
             <li aria-current="page">
               <div className="flex items-center text-gray-400">
                 <CaretRight weight="bold" />
-                <span className="ml-1 text font-medium text-gray-900 md:ml-2">
+                <span
+                  className="ml-1 text font-medium dark:text-gray-100 
+                text-gray-900 md:ml-2"
+                >
                   Create New App
                 </span>
               </div>
@@ -185,13 +188,16 @@ function AppCreate() {
         <form className="flex flex-col" onSubmit={handleSaveApp}>
           <div
             className="flex justify-between border-b border-gray-400 
-           items-center my-2 pb-2"
+           items-center my-2 pb-2 dark:text-white dark:border-gray-500"
           >
             <h1>APP Info</h1>
           </div>
           <ul className="my-3 space-y-5">
             <li className="flex space-x-3 items-center">
-              <IdentificationCard size={24} className="text-gray-900" />
+              <IdentificationCard
+                size={24}
+                className="text-gray-900 dark:text-gray-400"
+              />
               <span className="w-full flex flex-1 flex-col justify-between font-semibold leading-tight text-gray-600">
                 <Input
                   id="appName"
@@ -203,7 +209,7 @@ function AppCreate() {
               </span>
             </li>
             <li className="flex space-x-3 items-center">
-              <Key size={24} className="text-gray-900" />
+              <Key size={24} className="text-gray-900 dark:text-gray-400" />
               <span className="w-full flex flex-1 justify-between font-semibold leading-tight text-gray-600">
                 <Input
                   id="appId"
@@ -231,7 +237,8 @@ function AppCreate() {
                 className="w-full bg-white py-2 px-4 flex-1 text-gray-900 rounded text-sm 
                 placeholder:text-gray-400 border border-zinc-400 focus:outline-1 
                 focus:outline-zinc-500 disabled:bg-gray-200 disabled:cursor-not-allowed 
-                disabled:text-gray-800 font-semibold peer"
+                disabled:text-gray-800 font-semibold peer dark:text-white
+                dark:bg-gray-900 disabled:dark:text-gray-400"
               >
                 <option value="" defaultValue="" disabled>
                   SELECT THE SERVER...
@@ -240,7 +247,7 @@ function AppCreate() {
                   <option
                     key={serverData.name}
                     value={serverData.name}
-                    className="font-semibold text-gray-600"
+                    className="font-semibold text-gray-600 dark:text-gray-200"
                   >
                     {serverData.name} [{serverData.serverUrl}]
                   </option>
@@ -251,11 +258,11 @@ function AppCreate() {
         </form>
       </div>
 
-      <hr className="my-4" />
+      <hr className="my-4 dark:border-gray-600" />
 
       <div
         className="flex justify-between border-b mb-2 pb-2 border-gray-400 
-           items-center"
+           items-center dark:text-white dark:border-gray-500"
       >
         <h1>Sheets</h1>
         <button
@@ -270,12 +277,9 @@ function AppCreate() {
           New Sheet
         </button>
       </div>
-      <div className="overflow-x-auto p-2 relative shadow-lg rounded-lg border border-gray-300">
-        <table className="w-full text-sm text-left text-gray-500">
-          <thead
-            className="text-xs text-gray-800 uppercase bg-white 
-          border-b border-gray-300"
-          >
+      <div className="overflow-x-auto relative shadow-lg rounded-lg border border-gray-300">
+        <table className="w-full text-sm text-left dark:bg-gray-900 text-gray-900 dark:text-white">
+          <thead className="text-xs uppercase border-b border-gray-300">
             <tr>
               <th scope="col" className="py-4 px-6">
                 ID
@@ -288,11 +292,11 @@ function AppCreate() {
           </thead>
           <tbody>
             {sheetsList?.map((sheet) => (
-              <tr className="bg-white border-b" key={sheet.sheetId}>
-                <th scope="row" className="py-3 px-6 font-medium text-gray-900">
+              <tr className="border-b" key={sheet.sheetId}>
+                <th scope="row" className="py-3 px-6 font-medium">
                   {sheet.sheetId}
                 </th>
-                <td className="py-3 px-6 text-gray-900">{sheet.title}</td>
+                <td className="py-3 px-6">{sheet.title}</td>
                 <td className="py-3 px-6 justify-end flex">
                   <button
                     type="button"

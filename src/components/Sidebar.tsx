@@ -14,7 +14,7 @@ function Sidebar() {
 
   return (
     <aside
-      className="sidebar w-64 transform -translate-x-full 
+      className="sidebar w-64 transform -translate-x-full dark:bg-gray-800
         md:translate-x-0 transition-transform duration-150 ease-in bg-white"
     >
       <div className="sidebar-header flex items-center justify-center p-4">
@@ -23,28 +23,29 @@ function Sidebar() {
       <div className="sidebar-content px-4 py-6">
         <ul className="flex flex-col w-full">
           <li className="my-px">
-            <NavLink
-              to="/"
-              className="flex flex-row items-center h-10 px-3 rounded-lg 
-              text-gray-700 hover:bg-gray-600 hover:text-white"
-            >
-              <ChartPieSlice size={22} />
-              <span className="ml-3">Dashboard</span>
-            </NavLink>
-          </li>
-          <li className="my-px">
             <span
-              className="flex font-medium text-sm text-gray-400 px-4 my-4 
-              uppercase"
+              className="flex font-medium text-sm text-gray-400 
+              dark:text-gray-400 px-4 my-4 uppercase"
             >
               APP
             </span>
           </li>
           <li className="my-px">
             <NavLink
+              to="/"
+              className="flex flex-row items-center h-10 px-3 rounded-lg 
+              text-gray-700 dark:text-white hover:bg-gray-900 hover:text-white"
+            >
+              <ChartPieSlice size={22} />
+              <span className="ml-3">Dashboard</span>
+            </NavLink>
+          </li>
+          <li className="my-px">
+            <NavLink
               to="app-create"
               className="flex flex-row items-center h-10 px-3 rounded-lg 
-              text-gray-700 hover:bg-gray-600 hover:text-white"
+              text-gray-700 dark:text-gray-200 dark:hover:text-white 
+              hover:bg-gray-600 hover:text-white dark:hover:bg-gray-900"
             >
               <span className="text-green-400">
                 <PlusCircle size={22} />
@@ -55,7 +56,7 @@ function Sidebar() {
           <li className="my-px">
             <span
               className="flex font-medium text-sm text-gray-400 px-4 my-4 
-              uppercase"
+              uppercase dark:text-gray-400"
             >
               Config
             </span>
@@ -64,7 +65,8 @@ function Sidebar() {
             <NavLink
               to="servers"
               className="flex w-full flex-row items-center h-10 px-3 rounded-lg 
-              text-gray-700 hover:bg-gray-600 hover:text-white"
+              text-gray-700 hover:bg-gray-600 dark:hover:bg-gray-900 
+              hover:text-white dark:text-gray-200 dark:hover:text-white "
             >
               <HardDrives size={22} />
               <span className="ml-3">Servers</span>
@@ -75,7 +77,8 @@ function Sidebar() {
               type="button"
               onClick={handleSignOut}
               className="flex w-full flex-row items-center h-10 px-3 rounded-lg 
-              text-gray-700 hover:bg-gray-600 hover:text-white"
+              text-gray-700 hover:bg-gray-600 hover:text-white 
+              dark:hover:bg-gray-900 dark:text-gray-200 dark:hover:text-white "
             >
               <SignOut size={22} />
               <span className="ml-3">Sign out</span>
@@ -85,7 +88,8 @@ function Sidebar() {
             <a
               href="https://ipc-global.atlassian.net/l/cp/ZcNVjf11"
               target="_blank"
-              className="flex w-full flex-row items-center h-10 px-3 text-blue-700"
+              className="flex w-full flex-row items-center h-10 px-3 text-blue-700
+                dark:text-blue-400"
               rel="noreferrer"
             >
               <FileText size={22} />

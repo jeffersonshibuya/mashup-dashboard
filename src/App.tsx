@@ -18,20 +18,21 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { UserAuthProvider } from './context/UserAuthContext';
 import Servers from './pages/Servers';
+import ThemeContextWrapper from './context/ThemeContextWrapper';
 
 export function App() {
   return (
-    <div className="flex flex-row min-h-screen bg-gray-100 text-gray-800">
+    <div className="flex flex-row min-h-screen dark:bg-gray-400 bg-gray-100">
       <Sidebar />
-      <main className="main flex flex-col flex-1 -ml-64 md:ml-0 transition-all duration-150 ease-in">
+      <main className="main flex flex-col flex-1 -ml-64 md:ml-0">
         <Header />
-        <div className="main-content flex flex-col flex-grow p-2">
+        <div className="main-content flex flex-col flex-grow p-1">
           <ToastContainer autoClose={1500} />
           {/* <h1 className="font-bold text-2xl text-gray-700">Dashboard</h1> */}
 
           <div
             className="flex flex-col flex-1 p-2 border border-gray-200
-            bg-white rounded"
+            bg-white rounded dark:bg-gray-800 dark:border-gray-900"
           >
             <Routes>
               <Route path="/" element={<Dashboard />} />
@@ -53,7 +54,9 @@ export function WrappedApp({ user }: { user: User }) {
   return (
     <HashRouter>
       <UserAuthProvider userInfo={user}>
-        <App />
+        <ThemeContextWrapper>
+          <App />
+        </ThemeContextWrapper>
       </UserAuthProvider>
     </HashRouter>
   );

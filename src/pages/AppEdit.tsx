@@ -194,9 +194,9 @@ function AppEdit() {
       // eslint-disable-next-line react/no-unstable-nested-components
       customUI: ({ onClose }) => {
         return (
-          <div className="overflow-y-auto overflow-x-hidden  md:inset-0 h-modal md:h-full">
+          <div className="overflow-y-auto overflow-x-hidden md:inset-0 h-modal md:h-full">
             <div className="relative p-4 w-full max-w-md h-full md:h-auto">
-              <div className="relative bg-white rounded-lg shadow">
+              <div className="relative bg-white dark:bg-gray-900 rounded-lg shadow">
                 <button
                   type="button"
                   onClick={onClose}
@@ -212,14 +212,20 @@ function AppEdit() {
                   <div className="mx-auto mb-4 w-14 h-14 text-yellow-400">
                     <WarningCircle size={48} />
                   </div>
-                  <h3 className="mb-5 text-md font-normal text-gray-500 dark:text-gray-400">
+                  <h3
+                    className="mb-5 text-md font-normal text-gray-500 
+                  dark:text-gray-200"
+                  >
                     Are you sure you want to delete this sheet? <br />
                     <dl className="max-w-md text-gray-500 divide-y mt-2 divide-gray-400">
                       <div
                         className="flex flex-col pb-3 pt-3"
                         key={sheet.sheetId}
                       >
-                        <dt className="mb-1 font-semibold text-gray-700 flex items-center gap-2">
+                        <dt
+                          className="mb-1 font-semibold text-gray-700 flex 
+                        items-center gap-2 dark:text-gray-200"
+                        >
                           <CheckSquare
                             size={18}
                             color="#1f861d"
@@ -320,7 +326,10 @@ function AppEdit() {
         return (
           <div className="overflow-y-auto overflow-x-hidden  md:inset-0 h-modal md:h-full">
             <div className="relative p-4 w-full max-w-md h-full md:h-auto">
-              <div className="relative bg-white rounded-lg shadow">
+              <div
+                className="relative bg-white dark:bg-gray-900 border 
+                border-gray-400 rounded-lg shadow-lg"
+              >
                 <button
                   type="button"
                   onClick={onClose}
@@ -341,7 +350,10 @@ function AppEdit() {
                     <p>The app and all sheets will be deleted</p>
                     <dl className="max-w-md text-gray-500 divide-y mt-2 divide-gray-400">
                       <div className="flex flex-col pb-3 pt-3" key={appName}>
-                        <dt className="mb-1 font-semibold text-gray-700 flex items-center gap-2">
+                        <dt
+                          className="mb-1 font-semibold text-gray-700 flex 
+                          items-center gap-2 dark:text-gray-200"
+                        >
                           <CheckSquare
                             size={18}
                             color="#1f861d"
@@ -416,7 +428,7 @@ function AppEdit() {
               <NavLink
                 to="/"
                 className="inline-flex items-center text font-medium 
-                text-gray-400 hover:text-gray-800"
+                text-gray-400 hover:text-gray-800 dark:text-gray-400"
               >
                 <ChartPieSlice weight="fill" className="mr-1" />
                 Dashboard
@@ -425,7 +437,10 @@ function AppEdit() {
             <li aria-current="page">
               <div className="flex items-center text-gray-400">
                 <CaretRight weight="bold" />
-                <span className="ml-1 uppercase text-sm font-medium text-gray-900 md:ml-2">
+                <span
+                  className="ml-1 uppercase text-sm font-medium 
+                text-gray-900 md:ml-2 dark:text-white"
+                >
                   APP: {appName}
                 </span>
               </div>
@@ -466,7 +481,9 @@ function AppEdit() {
             className="flex justify-between border-b border-gray-400 
            items-center"
           >
-            <h1 className="text-lg text-gray-900 font-semibold">{appName}</h1>
+            <h1 className="text-lg text-gray-900 font-semibold dark:text-white">
+              {appName}
+            </h1>
             {editApp ? (
               <div className="flex justify-end gap-2">
                 {!loading && (
@@ -529,7 +546,7 @@ function AppEdit() {
           </div>
           <ul className="my-3 space-y-5">
             <li className="flex space-x-3 items-center">
-              <Key size={24} className="text-gray-900" />
+              <Key size={24} className="text-gray-900 dark:text-gray-300" />
               <span
                 className="w-full flex flex-1 justify-between font-semibold 
                 leading-tight text-gray-600"
@@ -559,10 +576,11 @@ function AppEdit() {
                 disabled={!editApp}
                 onChange={(e) => setNewServer(e.target.value)}
                 name="server"
-                className="w-full bg-white py-2 px-4 flex-1 text-gray-900 rounded text-sm 
-                placeholder:text-gray-400 border border-zinc-400 focus:outline-1 
+                className="w-full bg-white py-2 px-4 flex-1 text-gray-900 rounded 
+                text-sm placeholder:text-gray-400 border border-zinc-400 focus:outline-1 
                 focus:outline-zinc-500 disabled:bg-gray-200 disabled:cursor-not-allowed 
-                disabled:text-gray-800 font-semibold peer"
+                disabled:text-gray-900 font-semibold peer dark:text-white
+                dark:bg-gray-900 disabled:dark:text-gray-400"
               >
                 <option value="" defaultValue="" disabled>
                   SELECT THE SERVER...
@@ -571,7 +589,7 @@ function AppEdit() {
                   <option
                     key={serverData.name}
                     value={serverData.name}
-                    className="font-semibold text-gray-600"
+                    className="font-semibold"
                   >
                     {serverData.name} [{serverData.serverUrl}]
                   </option>
@@ -586,7 +604,7 @@ function AppEdit() {
 
       <div
         className="flex justify-between border-b mb-2 pb-2 border-gray-400 
-           items-center"
+           items-center dark:text-white"
       >
         <h1>Sheets</h1>
         <button
@@ -602,10 +620,10 @@ function AppEdit() {
         </button>
       </div>
       <div className="overflow-x-auto relative shadow-lg rounded-lg border border-gray-300">
-        <table className="w-full text-sm text-left text-gray-500">
+        <table className="w-full text-sm text-left dark:bg-gray-900 text-gray-900 dark:text-white">
           <thead
-            className="text-xs text-gray-800 uppercase bg-white 
-          border-b border-gray-300"
+            className="text-xs uppercase 
+            border-b border-gray-300 "
           >
             <tr>
               <th scope="col" className="py-4 px-6">
@@ -619,11 +637,11 @@ function AppEdit() {
           </thead>
           <tbody>
             {sheetsList?.map((sheet) => (
-              <tr className="bg-white border-b" key={sheet.sheetId}>
-                <th scope="row" className="py-3 px-6 font-medium text-gray-900">
+              <tr className="border-b" key={sheet.sheetId}>
+                <th scope="row" className="py-3 px-6 font-medium">
                   {sheet.sheetId}
                 </th>
-                <td className="py-3 px-6 text-gray-900">{sheet.title}</td>
+                <td className="py-3 px-6 ">{sheet.title}</td>
                 <td className="py-3 px-6 justify-end flex">
                   <button
                     type="button"

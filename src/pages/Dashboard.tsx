@@ -32,14 +32,14 @@ function Dashboard() {
     <>
       <div
         className="flex items-center justify-between pb-4 
-          border-b border-gray-300 h-12 mb-4"
+          border-b border-gray-300 dark:border-gray-600 h-12 mb-4"
       >
         <nav className="flex" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-3">
             <li className="inline-flex items-center">
               <span
                 className="inline-flex items-center text font-medium 
-                    text-gray-800"
+                    text-gray-800 dark:text-white"
               >
                 <ChartPieSlice weight="fill" className="mr-1" />
                 Dashboard
@@ -50,7 +50,10 @@ function Dashboard() {
         <NavLink
           to="/app-create"
           className="text-blue-500 bg-white gap-2 hover:bg-blue-400 
-            border border-blue-200 focus:ring-4 focus:outline-none 
+            border border-blue-200 dark:border-gray-800 focus:ring-4 
+            focus:outline-none 
+            dark:bg-gray-900 dark:hover:bg-blue-400 dark:text-gray-200
+            dark:hover:text-white
             focus:ring-gray-100 font-medium rounded-lg text-xs px-3 py-2 
             text-center inline-flex items-center mr-2 hover:text-white"
         >
@@ -77,7 +80,10 @@ function Dashboard() {
                 <NavLink
                   to="/app-create"
                   className="text-blue-500 bg-white gap-2 hover:bg-blue-400 
-                    border border-blue-200 focus:ring-4 focus:outline-none 
+                    border border-blue-200 dark:border-gray-800 focus:ring-4 
+                    focus:outline-none 
+                    dark:bg-gray-900 dark:hover:bg-blue-400 dark:text-gray-200
+                    dark:hover:text-white
                     focus:ring-gray-100 font-medium rounded-lg text-xs px-3 py-2 
                     text-center inline-flex items-center mr-2 hover:text-white"
                 >

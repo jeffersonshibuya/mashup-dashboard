@@ -233,7 +233,7 @@ function Servers() {
             <li className="inline-flex items-center">
               <span
                 className="inline-flex items-center text font-medium 
-                    text-gray-800"
+                    text-gray-800 dark:text-white"
               >
                 <HardDrives weight="fill" className="mr-1" />
                 Servers
@@ -273,11 +273,11 @@ function Servers() {
         className="overflow-x-auto shadow-lg rounded-lg border 
         border-gray-300"
       >
-        <table className="w-full table-fixed text-sm text-left text-gray-500">
-          <thead
-            className="text-xs text-gray-800 uppercase bg-white 
-            border-b border-gray-300"
-          >
+        <table
+          className="w-full table-fixed text-sm text-left text-gray-800
+        dark:bg-gray-900 dark:text-white"
+        >
+          <thead className="text-xs uppercase border-b border-gray-300">
             <tr>
               <th scope="col" className="py-4 px-6">
                 Server
@@ -304,7 +304,8 @@ function Servers() {
                   <div className="text-center">
                     <div role="status">
                       <svg
-                        className="inline mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                        className="inline mr-2 w-8 h-8 text-gray-200 animate-spin 
+                        dark:text-gray-600 fill-blue-600"
                         viewBox="0 0 100 101"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -325,34 +326,28 @@ function Servers() {
               </tr>
             ) : (
               servers?.map((serverData) => (
-                <tr className="bg-white border-b" key={serverData.name}>
-                  <th
-                    scope="row"
-                    className="py-3 px-6 font-medium text-gray-900"
-                  >
+                <tr className="border-b" key={serverData.name}>
+                  <th scope="row" className="py-3 px-6 font-medium">
                     {serverData.name}
                   </th>
-                  <th
-                    scope="row"
-                    className="py-3 px-6 font-medium text-gray-900"
-                  >
+                  <th scope="row" className="py-3 px-6 font-medium">
                     {serverData.serverUrl}
                   </th>
-                  <td className="py-3 px-6 text-gray-900">
+                  <td className="py-3 px-6">
                     {serverData.isAnonAccess ? (
                       <CheckCircle size={20} className="text-green-600" />
                     ) : (
                       <XCircle size={20} className="text-red-500" />
                     )}
                   </td>
-                  <td className="py-3 px-6 text-gray-900 truncate">
+                  <td className="py-3 px-6 truncate">
                     {serverData.webIntegrationId ? (
                       serverData.webIntegrationId
                     ) : (
                       <XCircle size={20} className="text-red-500" />
                     )}
                   </td>
-                  <td className="py-3 px-6 text-gray-900 truncate ">
+                  <td className="py-3 px-6 truncate ">
                     {serverData.anonUrl ? (
                       serverData.anonUrl
                     ) : (

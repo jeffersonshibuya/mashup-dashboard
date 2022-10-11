@@ -46,10 +46,14 @@ export default function ServerInfoModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-lg p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+              <Dialog.Panel
+                className="w-full max-w-lg p-6 overflow-hidden text-left 
+              align-middle transition-all transform bg-white shadow-xl 
+              rounded-2xl dark:bg-gray-900 dark:text-white"
+              >
                 <Dialog.Title
                   as="h3"
-                  className="text-lg font-medium leading-6 text-gray-900 flex 
+                  className="text-lg font-medium leading-6 flex 
                     justify-between items-center border-b border-gray-400 pb-3"
                 >
                   <span>Server Info</span>
@@ -70,7 +74,7 @@ export default function ServerInfoModal({
                           <p className="text-sm  text-gray-900 truncate dark:text-white">
                             Name
                           </p>
-                          <p className="text-gray-500 font-medium truncate dark:text-gray-900">
+                          <p className="text-gray-500 font-medium truncate ">
                             {serverInfo.name}
                           </p>
                         </div>
@@ -80,10 +84,8 @@ export default function ServerInfoModal({
                       <div className="flex items-center space-x-4">
                         <div className="flex-shrink-0" />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm  text-gray-900 truncate dark:text-white">
-                            Server URL
-                          </p>
-                          <p className="font-medium text-gray-500 truncate dark:text-gray-900">
+                          <p className="text-sm truncate">Server URL</p>
+                          <p className="font-medium text-gray-500 truncate">
                             {serverInfo.serverUrl}
                           </p>
                         </div>
@@ -97,7 +99,7 @@ export default function ServerInfoModal({
                             <p className="text-sm  text-gray-900 truncate dark:text-white">
                               Web Integration ID
                             </p>
-                            <p className="font-medium text-gray-500 truncate dark:text-gray-900">
+                            <p className="font-medium text-gray-500 truncate">
                               {serverInfo.webIntegrationId}
                             </p>
                           </div>

@@ -1,4 +1,5 @@
 import { useUserAuth } from '../context/UserAuthContext';
+import ThemeSwitch from './ThemeSwitch';
 
 function Header() {
   const { user } = useUserAuth();
@@ -9,7 +10,7 @@ function Header() {
     fullNameArray[1].charAt(0).toUpperCase();
 
   return (
-    <header className="header bg-white shadow py-4 px-4 ">
+    <header className="header bg-white shadow py-4 px-4 dark:bg-gray-800 dark:text-white">
       <div className="header-content flex items-center flex-row">
         {/* <form action="#">
           <div className="hidden md:flex relative">
@@ -55,7 +56,7 @@ function Header() {
           </div>
         </form> */}
         <div className="flex ml-auto">
-          <div className="flex flex-row items-center">
+          <div className="flex flex-row items-center mr-4">
             <div
               className="h-11 w-11 flex bg-[#0C396E]/90 border rounded-full 
               justify-center items-center font-bold text-white shadow tracking-wider"
@@ -66,11 +67,12 @@ function Header() {
               <span className="font-semibold tracking-wide leading-none">
                 {user.name}
               </span>
-              <span className="text-gray-500 text-xs leading-none mt-1">
+              <span className="text-zinc-800 dark:text-gray-400 text-xs leading-none mt-1">
                 {user.email}
               </span>
             </span>
           </div>
+          <ThemeSwitch />
         </div>
       </div>
     </header>

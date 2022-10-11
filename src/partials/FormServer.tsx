@@ -75,8 +75,14 @@ function FormServer({ onCancel, onUpdateServersList, serverSelected }: Props) {
       </div>
       <ul className="my-3 space-y-5">
         <li className="flex space-x-3 items-center">
-          <IdentificationCard size={24} className="text-gray-900" />
-          <span className="w-full flex flex-1 justify-between font-semibold leading-tight text-gray-600">
+          <IdentificationCard
+            size={24}
+            className="text-gray-900 dark:text-gray-400"
+          />
+          <span
+            className="w-full flex flex-1 justify-between font-semibold 
+            leading-tight text-gray-600"
+          >
             <Input
               id="name"
               name="name"
@@ -105,7 +111,7 @@ function FormServer({ onCancel, onUpdateServersList, serverSelected }: Props) {
           {serverUrl?.includes('qlikcloud') && (
             <div className="flex flex-1 items-center mr-4">
               <Globe size={24} className="text-gray-900" />
-              <span className="ml-2 flex-1 text-md font-medium text-gray-900">
+              <span className="ml-2 flex-1 text-md font-medium ">
                 <Input
                   id="webIntegragrationId"
                   name="webIntegrationId"
@@ -133,7 +139,7 @@ function FormServer({ onCancel, onUpdateServersList, serverSelected }: Props) {
               />
               <label
                 htmlFor="anon-access"
-                className="ml-2 text-sm font-medium text-gray-900"
+                className="ml-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 Allow anon access
               </label>
