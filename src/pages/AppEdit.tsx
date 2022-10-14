@@ -19,6 +19,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import { FormEvent, useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useQueryClient } from '@tanstack/react-query';
 import AddSheetModal from '../components/AddSheetModal';
 import { Input } from '../components/Form/Input';
 import AppModal from '../components/Modal';
@@ -34,6 +35,7 @@ interface Props {
 
 function AppEdit() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { appId, appName, serverName, sheets } = useLocation().state as Props;
 
   const [servers, setServers] = useState<ServersDataType>([]);
@@ -104,6 +106,7 @@ function AppEdit() {
       setNewAppId(appUpdated.appId);
       setNewServer(appUpdated.server);
       toast.success(`App: ${appName} Updated`);
+      queryClient.invalidateQueries(['apps']);
     } catch (error) {
       toast.error(`Error on update the APP`);
     } finally {
@@ -133,6 +136,7 @@ function AppEdit() {
       const sheetsListUpdated = response.data;
       setSheetsList(sheetsListUpdated);
       toast.success(`Sheet: ${data.title} Added`);
+      queryClient.invalidateQueries(['apps']);
     } catch (error) {
       toast.error('Error on add new sheet!');
     } finally {
@@ -161,6 +165,7 @@ function AppEdit() {
           .then((response) => {
             const sheetsListUpdated = response.data;
             setSheetsList(sheetsListUpdated);
+            queryClient.invalidateQueries(['apps']);
             resolve('');
           })
           .catch(() => reject);

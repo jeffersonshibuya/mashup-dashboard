@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { AnimatePresence } from 'framer-motion';
 import {
   CheckCircle,
@@ -13,19 +14,17 @@ import {
   X,
   XCircle,
 } from 'phosphor-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { confirmAlert } from 'react-confirm-alert';
 import { toast } from 'react-toastify';
 import ServerInfoModal from '../components/ServerInfoModal';
 import FormServer from '../partials/FormServer';
 import { api } from '../services/api';
-import { ServerData, ServersDataType } from '../types';
+import { fetchServers } from '../services/fetchers';
+import { ServerData } from '../types';
 
 function Servers() {
-  const [servers, setServers] = useState<ServersDataType>([]);
-
   const [isAddNewServer, setIsAddNewServer] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [serverInfo, setServerInfo] = useState({} as ServerData);
   const [serverSelected, setServerSelected] = useState<ServerData>(
@@ -41,23 +40,13 @@ function Servers() {
     webIntegrationId: '',
   } as ServerData;
 
-  async function getServersList() {
-    setLoading(true);
-    const serversResponse = await api.post<ServersDataType>(
-      '/servers',
-      {
-        action: 'list',
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-
-    setLoading(false);
-    return serversResponse.data;
-  }
+  const { data, isLoading, isFetching, refetch } = useQuery(
+    ['servers'],
+    fetchServers,
+    {
+      staleTime: 120000,
+    }
+  );
 
   function handleEditServer(serverData: ServerData) {
     setServerSelected(serverData);
@@ -70,8 +59,7 @@ function Servers() {
   }
 
   async function handleUpdateServersList() {
-    const serversList = await getServersList();
-    setServers(serversList);
+    await refetch();
     handleCancelForm();
   }
 
@@ -97,8 +85,9 @@ function Servers() {
             }
           )
           .then(async () => {
-            const serversList = await getServersList();
-            setServers(serversList);
+            // const serversList = await getServersList();
+            // setServers(serversList);
+            await refetch();
             resolve('');
           })
           .catch(() => reject);
@@ -180,12 +169,13 @@ function Servers() {
                   </h3>
                   <button
                     type="button"
+                    disabled={isLoading || isFetching}
                     onClick={onClose}
-                    disabled={loading}
                     className="text-white bg-gray-600 hover:bg-gray-800 
                     focus:ring-4 focus:outline-none focus:ring-gray-200 
                     rounded-lg border border-gray-200 text-sm font-medium 
-                    px-5 py-2.5 hover:text-white focus:z-10 mr-2 gap-1 inline-flex"
+                    cursor-pointer px-5 py-2.5 hover:text-white focus:z-10 
+                    mr-2 gap-1 inline-flex disabled:cursor-not-allowed"
                   >
                     <XCircle size={20} />
                     Cancel
@@ -212,15 +202,6 @@ function Servers() {
       },
     });
   }
-
-  useEffect(() => {
-    async function init() {
-      const serversList = await getServersList();
-      setServers(serversList);
-    }
-
-    init();
-  }, []);
 
   return (
     <>
@@ -298,7 +279,7 @@ function Servers() {
             </tr>
           </thead>
           <tbody>
-            {loading ? (
+            {isLoading || isFetching ? (
               <tr className="justify-center items-center">
                 <th colSpan={5} className="h-[200px]">
                   <div className="text-center">
@@ -325,7 +306,7 @@ function Servers() {
                 </th>
               </tr>
             ) : (
-              servers?.map((serverData) => (
+              data?.map((serverData) => (
                 <tr className="border-b" key={serverData.name}>
                   <th scope="row" className="py-3 px-6 font-medium">
                     {serverData.name}

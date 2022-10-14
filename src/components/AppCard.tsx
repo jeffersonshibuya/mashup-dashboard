@@ -5,6 +5,7 @@ import {
   Copy,
   Key,
   LinkSimple,
+  ListChecks,
   Lock,
   LockKeyOpen,
   Pencil,
@@ -91,7 +92,7 @@ function AppCard({
           </Tabs.TabsTrigger>
         </Tabs.TabsList>
         <Tabs.TabsContent value="tab1" className="border-none h-[200px]">
-          <ul className="my-5 space-y-5">
+          <ul className="my-5 space-y-5 ">
             <li className="flex space-x-3 items-center">
               <Key
                 size={24}
@@ -197,35 +198,19 @@ function AppCard({
           value="tab2"
           className="border-none h-[200px] overflow-y-auto mb-4"
         >
-          {/* <ul className="my-3 space-y-5">
-            {sheets.map((sheet) => (
-              <li className="space-x-3" key={sheet.sheetId}>
-                <div className="flex flex-1 justify-between mr-2">
-                  <div className="flex flex-1 items-center gap-3">
-                    <CheckCircle size={20} className="text-green-700" />
-                    <div className="flex flex-1 flex-col">
-                      <span
-                        className="text-base font-semibold leading-tight 
-                      text-gray-600 "
-                      >
-                        {sheet.title}
-                      </span>
-                      <span
-                        className="flex flex-1 items-center justify-between leading-tight 
-                          text-gray-400"
-                      >
-                        {sheet.sheetId}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul> */}
-          <dl className="max-w-md text-gray-500 divide-y mt-4 divide-gray-400">
+          <dl className="max-w-md text-gray-500 dark:text-gray-400 divide-y mt-4 divide-gray-400">
+            {sheets.length === 0 && (
+              <div className="flex gap-2 items-center dark:text-gray-300 text-gray-600 text-sm">
+                <ListChecks size={18} />
+                All sheets will be displayed
+              </div>
+            )}
             {sheets.map((sheet) => (
               <div className="flex flex-col pb-3 pt-3" key={sheet.sheetId}>
-                <dt className="mb-1 font-semibold text-gray-700 text-lg flex items-center gap-2">
+                <dt
+                  className="mb-1 font-semibold text-gray-700 dark:text-white 
+                  text-lg flex items-center gap-2"
+                >
                   <CheckSquare size={18} color="#1f861d" weight="duotone" />
                   {sheet.title}
                 </dt>

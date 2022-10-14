@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import {
@@ -14,21 +14,23 @@ import {
   Trash,
   Warning,
 } from 'phosphor-react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../services/api';
 
 import AddSheetModal from '../components/AddSheetModal';
 import { Input } from '../components/Form/Input';
-import { ServersDataType, sheetsResponseData } from '../types';
+import { sheetsResponseData } from '../types';
+import { fetchServers } from '../services/fetchers';
 
 function AppCreate() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [appName, setAppName] = useState('');
   const [appId, setAppId] = useState('');
   const [loading, setLoading] = useState(false);
   const [sheetsList, setSheetsList] = useState<sheetsResponseData[]>([]);
   const [openAddModal, setOpenAddModal] = useState(false);
-  const [servers, setServers] = useState<ServersDataType>([]);
   const [serverSelected, setServerSelected] = useState('');
 
   function handleAddSheet(data: { title: string; sheetId: string }) {
@@ -94,6 +96,9 @@ function AppCreate() {
         }
       );
       toast.success(`APP: ${appName} Added`);
+
+      queryClient.invalidateQueries(['apps']);
+
       navigate('/');
     } catch (error) {
       toast.error(`Error on add new app`);
@@ -102,25 +107,29 @@ function AppCreate() {
     }
   }
 
-  useEffect(() => {
-    async function init() {
-      const serversResponse = await api.post<ServersDataType>(
-        '/servers',
-        {
-          action: 'list',
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+  // useEffect(() => {
+  //   async function init() {
+  //     const serversResponse = await api.post<ServersDataType>(
+  //       '/servers',
+  //       {
+  //         action: 'list',
+  //       },
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //       }
+  //     );
 
-      setServers(serversResponse.data);
-    }
+  //     setServers(serversResponse.data);
+  //   }
 
-    init();
-  }, []);
+  //   init();
+  // }, []);
+
+  const servers = useQuery(['servers'], fetchServers, {
+    staleTime: 120000,
+  });
 
   return (
     <>
@@ -243,7 +252,7 @@ function AppCreate() {
                 <option value="" defaultValue="" disabled>
                   SELECT THE SERVER...
                 </option>
-                {servers.map((serverData) => (
+                {servers.data?.map((serverData) => (
                   <option
                     key={serverData.name}
                     value={serverData.name}

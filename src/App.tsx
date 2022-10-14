@@ -1,10 +1,11 @@
-import { useState } from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
-import Footer from './components/Footer';
 
 import Home from './pages/Home';
 import AppEdit from './pages/AppEdit';
@@ -51,11 +52,16 @@ export function App() {
 }
 
 export function WrappedApp({ user }: { user: User }) {
+  const queryClient = new QueryClient();
+
   return (
     <HashRouter>
       <UserAuthProvider userInfo={user}>
         <ThemeContextWrapper>
-          <App />
+          <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen />
+            <App />
+          </QueryClientProvider>
         </ThemeContextWrapper>
       </UserAuthProvider>
     </HashRouter>

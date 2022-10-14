@@ -68,8 +68,8 @@ function FormServer({ onCancel, onUpdateServersList, serverSelected }: Props) {
       onSubmit={handleSaveServer}
     >
       <div
-        className="flex justify-between border-b border-gray-400 
-           items-center my-2 pb-2"
+        className="flex justify-between border-b border-gray-400 font-medium
+           items-center my-2 pb-2 text-gray-900 dark:text-gray-100"
       >
         <h1>Server Info</h1>
       </div>

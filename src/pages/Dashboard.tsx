@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-no-useless-fragment */
+import { useQuery } from '@tanstack/react-query';
 import { ChartPieSlice, FolderPlus } from 'phosphor-react';
-import { useEffect, useState } from 'react';
+
 import { NavLink } from 'react-router-dom';
 
 import AppCard from '../components/AppCard';
@@ -9,24 +10,19 @@ import { api } from '../services/api';
 import { appsDataType } from '../types';
 
 function Dashboard() {
-  const [apps, setApps] = useState<appsDataType>([]);
-  const [loading, setLoading] = useState(true);
+  async function fetchApps() {
+    const response = await api.get<appsDataType>('/apps', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-  useEffect(() => {
-    async function init() {
-      setLoading(true);
-      const appsInfo = await api.get<appsDataType>('/apps', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+    return response.data;
+  }
 
-      setApps(appsInfo.data);
-      setLoading(false);
-    }
-
-    init();
-  }, []);
+  const { data, isLoading, isFetching } = useQuery(['apps'], fetchApps, {
+    staleTime: 120000,
+  });
 
   return (
     <>
@@ -61,7 +57,7 @@ function Dashboard() {
           Add New App
         </NavLink>
       </div>
-      {loading ? (
+      {isLoading || isFetching ? (
         <div className="grid grid-cols-3 gap-3">
           <Loading />
           <Loading />
@@ -70,7 +66,7 @@ function Dashboard() {
         </div>
       ) : (
         <>
-          {apps?.length === 0 ? (
+          {data?.length === 0 ? (
             <div
               className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4"
               role="alert"
@@ -94,7 +90,7 @@ function Dashboard() {
             </div>
           ) : (
             <div className="grid grid-cols-3 gap-3">
-              {apps?.map((app) => (
+              {data?.map((app) => (
                 <AppCard
                   key={app.name}
                   appId={app.appId}
