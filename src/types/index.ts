@@ -17,6 +17,7 @@ export type ServerData = {
 export type sheetsResponseData = {
   sheetId: string;
   title: string;
+  sortOrder?: number;
 };
 
 export type User = {

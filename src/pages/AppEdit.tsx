@@ -16,18 +16,23 @@ import {
   XCircle,
 } from 'phosphor-react';
 import { confirmAlert } from 'react-confirm-alert';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { DragDropContext, Draggable } from 'react-beautiful-dnd';
+
 import { toast } from 'react-toastify';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import AddSheetModal from '../components/AddSheetModal';
 import { Input } from '../components/Form/Input';
 import AppModal from '../components/Modal';
 import { api } from '../services/api';
-import { ServersDataType, sheetsResponseData } from '../types';
+import { sheetsResponseData } from '../types';
+import { StrictModeDroppable } from '../components/Droppable';
+import { fetchServers } from '../services/fetchers';
+import TableLoading from '../components/TableLoading';
 
 interface Props {
-  appId: string;
+  appId?: string;
   appName: string;
   serverName: string;
   sheets: sheetsResponseData[];
@@ -36,14 +41,20 @@ interface Props {
 function AppEdit() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  if (!useLocation().state) {
+    window.location.href = window.location.origin;
+  }
   const { appId, appName, serverName, sheets } = useLocation().state as Props;
 
-  const [servers, setServers] = useState<ServersDataType>([]);
+  // const [servers, setServers] = useState<ServersDataType>([]);
   const [newAppId, setNewAppId] = useState(appId);
   const [newServer, setNewServer] = useState(serverName);
 
   const [editApp, setEditApp] = useState(false);
-  const [sheetsList, setSheetsList] = useState(sheets);
+  const [sheetsList, setSheetsList] = useState(
+    sheets.sort((a, b) => (a.sortOrder || 1) - (b.sortOrder || 0))
+  );
   const [editSheet, setEditSheet] = useState({} as sheetsResponseData);
   const [openModal, setOpenModal] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
@@ -404,12 +415,25 @@ function AppEdit() {
     });
   }
 
-  useEffect(() => {
-    async function init() {
-      const serversResponse = await api.post<ServersDataType>(
-        '/servers',
+  async function handleOnDragEnd(result: any) {
+    if (!result.destination) return;
+
+    // const items = Array.from(sheetsList);
+    // const [reorderedItem] = items.splice(result.source.index, 1);
+    // items.splice(result.destination.index, 0, reorderedItem);
+
+    const switchSource = sheetsList[result.destination.index];
+    const switchDestination = sheetsList[result.source.index];
+    switchSource.sortOrder = result.source.index + 1;
+    switchDestination.sortOrder = result.destination.index + 1;
+
+    try {
+      setLoading(true);
+      const sheetsListUpdated = await api.post<sheetsResponseData[]>(
+        '/sheets',
         {
-          action: 'list',
+          action: 'update-order',
+          sheets: [switchSource, switchDestination],
         },
         {
           headers: {
@@ -418,11 +442,25 @@ function AppEdit() {
         }
       );
 
-      setServers(serversResponse.data);
+      setSheetsList(
+        sheetsListUpdated.data.sort(
+          (a, b) => (a.sortOrder || 1) - (b.sortOrder || 0)
+        )
+      );
+      // toast.success(`Sheets order changed successfully`);
+    } catch (error) {
+      toast.error('Error on updated sheet');
+    } finally {
+      setOpenModal(false);
+      setLoading(false);
     }
 
-    init();
-  }, []);
+    // setSheetsList(items);
+  }
+
+  const servers = useQuery(['servers'], fetchServers, {
+    staleTime: 120000,
+  });
 
   return (
     <>
@@ -566,7 +604,7 @@ function AppEdit() {
               </span>
             </li>
             <li className="flex space-x-3 items-center">
-              {newServer.includes('qlikcloud') ? (
+              {newServer?.includes('qlikcloud') ? (
                 <Cloud size={24} className="text-green-600" weight="duotone" />
               ) : (
                 <ComputerTower
@@ -590,7 +628,7 @@ function AppEdit() {
                 <option value="" defaultValue="" disabled>
                   SELECT THE SERVER...
                 </option>
-                {servers.map((serverData) => (
+                {servers.data?.map((serverData) => (
                   <option
                     key={serverData.name}
                     value={serverData.name}
@@ -625,7 +663,90 @@ function AppEdit() {
         </button>
       </div>
       <div className="overflow-x-auto relative shadow-lg rounded-lg border border-gray-300">
-        <table className="w-full text-sm text-left dark:bg-gray-900 text-gray-900 dark:text-white">
+        {loading ? (
+          <TableLoading />
+        ) : (
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <StrictModeDroppable droppableId="sheetsList">
+              {(provided) => (
+                <table className="w-full text-sm text-left dark:bg-gray-900 text-gray-900 dark:text-white">
+                  <thead className="text-xs uppercase border-b border-gray-300 ">
+                    <tr>
+                      <th scope="col" className="py-4 px-6">
+                        Order
+                      </th>
+                      <th scope="col" className="py-4 px-6">
+                        ID
+                      </th>
+                      <th scope="col" className="py-4 px-6">
+                        Title
+                      </th>
+                      <th scope="col" className="py-4 px-6" />
+                    </tr>
+                  </thead>
+                  <tbody {...provided.droppableProps} ref={provided.innerRef}>
+                    {sheetsList.map(({ sheetId, title, sortOrder }, index) => {
+                      return (
+                        <Draggable
+                          key={sheetId}
+                          draggableId={sheetId}
+                          index={index}
+                        >
+                          {(provided2) => (
+                            <tr
+                              className="border-b"
+                              key={sheetId}
+                              ref={provided2.innerRef}
+                              {...provided2.draggableProps}
+                              {...provided2.dragHandleProps}
+                            >
+                              <td className="py-3 px-6 ">{sortOrder}</td>
+                              <th className="py-3 px-6 font-medium">
+                                {sheetId}
+                              </th>
+                              <td className="py-3 px-6 ">{title}</td>
+                              <td className="py-3 px-6 justify-end flex">
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleEditSheet({ sheetId, title })
+                                  }
+                                  className="text-blue-400 border border-blue-200 hover:text-white 
+                                hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 
+                                font-medium rounded-lg text-sm p-2.5 text-center inline-flex 
+                                items-center mr-2
+                                "
+                                >
+                                  <Pencil size={18} />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleConfirmDeleteSheet({ sheetId, title })
+                                  }
+                                  className="text-red-500 border border-red-200 hover:text-white 
+                                hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-blue-300 
+                                font-medium rounded-lg text-sm p-2.5 text-center inline-flex 
+                                items-center mr-2
+                                "
+                                >
+                                  <Trash size={18} />
+                                </button>
+                              </td>
+                            </tr>
+                          )}
+                        </Draggable>
+                      );
+                    })}
+                    {provided.placeholder}
+                  </tbody>
+                </table>
+              )}
+            </StrictModeDroppable>
+          </DragDropContext>
+        )}
+
+        {/* <table className="w-full text-sm text-left dark:bg-gray-900 text-gray-900 dark:text-white">
           <thead
             className="text-xs uppercase 
             border-b border-gray-300 "
@@ -674,7 +795,7 @@ function AppEdit() {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table> */}
       </div>
     </>
   );

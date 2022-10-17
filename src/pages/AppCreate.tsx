@@ -35,7 +35,10 @@ function AppCreate() {
 
   function handleAddSheet(data: { title: string; sheetId: string }) {
     setLoading(true);
-    setSheetsList([...sheetsList, { ...data }]);
+    setSheetsList([
+      ...sheetsList,
+      { ...data, sortOrder: sheetsList.length + 1 },
+    ]);
     setLoading(false);
   }
 
@@ -44,7 +47,17 @@ function AppCreate() {
       (sheetItem) => sheetItem.sheetId !== sheet.sheetId
     );
 
-    setSheetsList(sheetsListUpdated);
+    const sheetsListReordered = sheetsListUpdated
+      .sort((a, b) => (a.sortOrder || 1) - (b.sortOrder || 0))
+      .map((sheetItem, index) => {
+        return {
+          sheetId: sheetItem.sheetId,
+          title: sheetItem.title,
+          sortOrder: index + 1,
+        };
+      });
+
+    setSheetsList(sheetsListReordered);
   }
 
   async function handleSaveApp() {
@@ -106,26 +119,6 @@ function AppCreate() {
       setLoading(false);
     }
   }
-
-  // useEffect(() => {
-  //   async function init() {
-  //     const serversResponse = await api.post<ServersDataType>(
-  //       '/servers',
-  //       {
-  //         action: 'list',
-  //       },
-  //       {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //       }
-  //     );
-
-  //     setServers(serversResponse.data);
-  //   }
-
-  //   init();
-  // }, []);
 
   const servers = useQuery(['servers'], fetchServers, {
     staleTime: 120000,
@@ -291,6 +284,9 @@ function AppCreate() {
           <thead className="text-xs uppercase border-b border-gray-300">
             <tr>
               <th scope="col" className="py-4 px-6">
+                Order
+              </th>
+              <th scope="col" className="py-4 px-6">
                 ID
               </th>
               <th scope="col" className="py-4 px-6">
@@ -302,6 +298,9 @@ function AppCreate() {
           <tbody>
             {sheetsList?.map((sheet) => (
               <tr className="border-b" key={sheet.sheetId}>
+                <th scope="row" className="py-3 px-6 font-medium">
+                  {sheet.sortOrder}
+                </th>
                 <th scope="row" className="py-3 px-6 font-medium">
                   {sheet.sheetId}
                 </th>

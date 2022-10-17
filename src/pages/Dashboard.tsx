@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react/jsx-no-useless-fragment */
 import { useQuery } from '@tanstack/react-query';
 import { ChartPieSlice, FolderPlus } from 'phosphor-react';
