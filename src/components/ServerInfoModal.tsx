@@ -130,7 +130,10 @@ export default function ServerInfoModal({
                             <p className="text-sm  text-gray-900 truncate dark:text-white">
                               Anon URL
                             </p>
-                            <p className="font-medium text-gray-500 dark:text-gray-900">
+                            <p
+                              className="font-medium 
+                            dark:text-gray-500 text-gray-900"
+                            >
                               {serverInfo.anonUrl}
                             </p>
                           </div>

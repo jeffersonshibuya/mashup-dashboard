@@ -136,6 +136,7 @@ function AppEdit() {
           name: appName,
           sheetId: data.sheetId,
           title: data.title,
+          sortOrder: sheetsList.length + 1,
         },
         {
           headers: {
