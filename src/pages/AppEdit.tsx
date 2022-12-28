@@ -97,25 +97,24 @@ function AppEdit() {
     e.preventDefault();
     try {
       setLoading(true);
-      const response: { data: { appId: string; server: string } } =
-        await api.post(
-          '/app',
-          {
-            action: 'create-update',
-            name: appName,
-            appId: newAppId,
-            server: newServer,
+      const response = await api.post(
+        '/app',
+        {
+          action: 'create-update',
+          name: appName,
+          appId: newAppId,
+          server: newServer,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
           },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        );
+        }
+      );
 
       const appUpdated = response.data;
       setNewAppId(appUpdated.appId);
-      setNewServer(appUpdated.server);
+      setNewServer(appUpdated.server.name);
       toast.success(`App: ${appName} Updated`);
       queryClient.invalidateQueries(['apps']);
     } catch (error) {
@@ -310,6 +309,7 @@ function AppEdit() {
             }
           )
           .then(() => {
+            queryClient.invalidateQueries(['apps']);
             resolve(navigate('/'));
           })
           .catch(() => reject);
