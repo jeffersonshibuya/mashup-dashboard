@@ -5,9 +5,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "s3": "aws s3 cp .\\dist\\ s3://mashup-dashboard/ --recursive --profile training",
-    "build": "tsc && vite build && yarn s3",
+    "s3-push": "aws s3 cp .\\build\\ s3://mashup-bootstrap --recursive --profile training",
+    "s3-clean": "aws s3 rm s3://mashup-bootstrap --recursive --profile training",
+    "aws-login": "aws sso login --profile training",
+    "dev": "vite --host",
+    "build": "tsc && vite build && yarn aws-login && s3-clean && s3-push",
     "preview": "vite preview",
     "test": "vitest"
   },
