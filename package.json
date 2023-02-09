@@ -9,7 +9,7 @@
     "s3-clean": "aws s3 rm s3://mashup-dashboard --recursive --profile training",
     "aws-login": "aws sso login --profile training",
     "dev": "vite --host",
-    "build": "tsc && vite build && yarn aws-login && yarn s3-clean && s3-push",
+    "build": "tsc && vite build && yarn aws-login && yarn s3-clean && yarn s3-push",
     "preview": "vite preview",
     "test": "vitest"
   },
