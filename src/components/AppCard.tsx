@@ -183,7 +183,7 @@ function AppCard({
                 weight="regular"
               />
               <a
-                href={`https://informedbydata.ipc-global.com/${appName}`}
+                href={`https://informed-by-data.ipc-global.com/${appName}`}
                 target="_blank"
                 className="flex justify-between font-semibold transition-all duration-300
               leading-tight text-blue-500 hover:text-blue-800"
